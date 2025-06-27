@@ -1,0 +1,52 @@
+# 🧠 Node.js bog'lanishlar
+node_modules/
+
+# 📦 Next.js va boshqa build chiqishlar
+.next/
+out/
+
+# ⚙️ Loyiha vaqtinchalik fayllari
+dist/
+build/
+.cache/
+coverage/
+
+# 📄 Konfiguratsion yoki foydalanuvchi maxfiy fayllar
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 📜 Log fayllar
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# 💻 IDE va editor fayllari
+.vscode/
+.idea/
+*.swp
+
+# 📷 Operatsion tizim fayllari
+.DS_Store
+Thumbs.db
+
+# 🚀 Production .vercel (Next.js hosting)
+.vercel/
+
+# 🐞 Storybook (agar ishlatilsa)
+storybook-static/
+
+# 🔒 Hususiy yoki testing fayllar
+*.local.js
+*.test.js
+*.test.ts
+*.spec.ts
+*.spec.js
+
+# ⚛️ React + Tailwind vaqtinchaliklar
+*.log
+*.tmp
+*.cache
