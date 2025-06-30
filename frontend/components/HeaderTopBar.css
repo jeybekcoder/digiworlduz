@@ -1,0 +1,25 @@
+/* 📄 CSS: digiworlduz/frontend/components/HeaderTopBar.css */
+
+.topbar-link {
+  position: relative;
+  box-sizing: border-box;
+}
+
+.topbar-link::after {
+  content: "";
+  display: block;
+  width: 1px;
+  height: 13px;
+  background-color: #ebebeb;
+  position: absolute;
+  right: 0px;
+  top: 50%;
+  transform: translateY(-6.5px);
+  transition: all 0.3s ease-out;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.topbar-link:last-child::after {
+  display: none;
+}

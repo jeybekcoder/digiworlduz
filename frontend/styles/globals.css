@@ -1,0 +1,15 @@
+/* 📄 Fayl: digiworlduz/frontend/styles/globals.css */
+/* 🎯 Maqsad: Tailwind CSS asosiy qismlarini loyihaga ulash va global uslublarni kiritish */
+
+/* Tailwind directives */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* 🔧 Qo‘shimcha global stillar shu yerga yoziladi */
+
+html {
+  font-family: 'Rubik', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
