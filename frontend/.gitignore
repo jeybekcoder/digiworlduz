@@ -1,154 +1,116 @@
-node_modules
-# === Python / Django ===
-__pycache__/
-*.py[cod]
-*.pyo
-*.pyd
-*.pyc
-*.pyc.*
-*.so
-*.egg
-*.egg-info/
-dist/
-build/
-*.manifest
-pip-log.txt
-pip-delete-this-directory.txt
-htmlcov/
-.coverage
-.tox/
-nosetests.xml
-coverage.xml
-*.cover
-*.py,cover
-.cache/
-*.log
-
-# Django specific
-*.sqlite3
-db.sqlite3
-local_settings.py
-.env
-.env.*
-.envrc
-.settings/
-secrets.json
-media/
-staticfiles/
-static_root/
-media_root/
-instance/
-config/settings/local.py
-
-# Virtual env
-venv/
-venv.bak/
-env/
-env.bak/
-.virtualenv/
-.venv/
-ENV/
-*.env
-
-# === Node / Next.js ===
+# ─── NODE (Next.js frontend) ─────────────────────────────────────────────
 node_modules/
 .next/
 out/
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-pnpm-lock.yaml
-yarn.lock
+pnpm-debug.log*
 package-lock.json
+yarn.lock
+pnpm-lock.yaml
 
-# Build output
-build/
+# ─── PYTHON (FastAPI backend) ────────────────────────────────────────────
+__pycache__/
+*.py[cod]
+*.egg
+*.egg-info/
 dist/
-.next/
-.vercel/
-*.tsbuildinfo
+build/
+.eggs/
+pip-wheel-metadata/
+*.pyd
+*.so
+*.dSYM
 
-# === Frontend static/media ===
-public/media/
-public/static/
-uploads/
-*.webp
-*.png
-*.jpg
-*.jpeg
-*.gif
-*.svg
+# ─── ENVIRONMENT FILES ───────────────────────────────────────────────────
+.env
+.env.*
+!.env.example
 
-# === System Files ===
+# ─── IDE FOLDERS ─────────────────────────────────────────────────────────
+.vscode/
+.idea/
+*.sublime-workspace
+*.sublime-project
+
+# ─── SYSTEM FILES ────────────────────────────────────────────────────────
 .DS_Store
 Thumbs.db
+*.swp
+*.bak
+*.tmp
+*.log
+
+# ─── PYTHON VIRTUAL ENV ──────────────────────────────────────────────────
+venv/
+ENV/
+env/
+.venv/
+.ENV/
+.envrc
+
+# ─── TEST / COVERAGE / REPORT ────────────────────────────────────────────
+htmlcov/
+.coverage
+coverage.xml
+*.cover
+.cache/
+pytest_cache/
+.tox/
+.nox/
+
+# ─── SENTRY / MONITORING / DEBUG ─────────────────────────────────────────
+*.map
+.sentryclirc
+
+# ─── DATABASE ────────────────────────────────────────────────────────────
+*.db
+*.sqlite3
+*.sql
+*.dump
+
+# ─── OS Specific ─────────────────────────────────────────────────────────
 ehthumbs.db
 Icon?
 Desktop.ini
-$RECYCLE.BIN/
 
-# === IDE / Editor ===
-.vscode/
-.idea/
-*.sublime-project
-*.sublime-workspace
-*.code-workspace
-*.iml
-*.swp
-*.bak
+# ─── STATIC / MEDIA / STORAGE (Cloudinary + local dev media) ────────────
+media/
+staticfiles/
+public/static/
 
-# === Docker ===
-*.pid
-*.sock
-docker-compose.override.yml
-*.pid.lock
-
-# === Logs & Reports ===
+# ─── LOG FILES ───────────────────────────────────────────────────────────
 *.log
 logs/
+logfile.txt
+
+# ─── DEPLOYMENT & BUILD ──────────────────────────────────────────────────
+.vercel/
+.render/
 *.pid
-*.pid.lock
-celerybeat-schedule
-celerybeat.pid
 
-# === MySQL / PostgreSQL Dumps ===
-*.sql
-*.dump
-*.backup
+# ─── COVERAGE / DOCS / BUILD ARTIFACTS ───────────────────────────────────
+coverage/
+site/
+*.spec.js.snap
 
-# === Test / Coverage ===
-.pytest_cache/
-cover/
-coverage.*
-*.coveragerc
-*.pytest_cache/
-test-results/
-test-output/
-junit-*.xml
+# ─── FRONTEND BUILD OUTPUT ───────────────────────────────────────────────
+public/build/
+build/
+build-ssr/
+.svelte-kit/
+.eslintcache
 
-# === Redis / Cache ===
-*.rdb
-*.aof
-*.log
+# ─── PERSONAL CONFIGS ────────────────────────────────────────────────────
+*.local
+*.secret
+*.env.local
 
-# === Others ===
-*.tmp
-*.bak
-*.orig
-*.old
-*.rej
+# ─── PERSISTENT BROWSER STORAGE ──────────────────────────────────────────
+.local-chromium/
+.chromium-cache/
 
-# === Backup / OS Temp ===
-*.~*
-*.sw?
-*~
-~$*
-*.tmp
-*.temp
-
-# === VSCode Workspace Storage ===
-.vscode/settings.json
-.vscode/tasks.json
-.vscode/launch.json
-.vscode/extensions.json
-.history/
+# ─── BACKEND GENERATED ───────────────────────────────────────────────────
+instance/
+alembic/versions/*.py

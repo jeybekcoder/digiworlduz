@@ -1,31 +1,54 @@
+// 📄 Fayl: frontend/tsconfig.json
+// 🎯 Maqsad: DigiWorldUZ Next.js + TypeScript loyihasi uchun to‘liq tsconfig sozlamalari
+// 🧱 TECHUS stack uchun optimallashtirilgan, alias, path, casing, strict mode qo‘llangan
 {
   "compilerOptions": {
     "target": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "module": "esnext",
-    "moduleResolution": "node",
-    "esModuleInterop": true,
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "allowJs": true,
-    "jsx": "preserve",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "noEmit": true,
-    "types": ["react", "react-dom", "node"],
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
     "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
     "incremental": true,
-    "plugins": [{ "name": "next" }],
-    "baseUrl": ".",                            // ✅ Qo‘shildi
-    "paths": {                                 // ✅ Qo‘shildi
-      "@/*": ["./*"]
-    }
+    "isolatedModules": true,
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "jsx": "preserve",
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": [
+        "./*"
+      ],
+      "@components/*": [
+        "src/components/*"
+      ],
+      "@app/*": [
+        "src/app/*"
+      ],
+      "@styles/*": [
+        "styles/*"
+      ]
+    },
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
   },
   "include": [
     "next-env.d.ts",
-    ".next/types/**/*.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": ["node_modules"]
+    "src/**/*",
+    ".next/types/**/*.ts"
+, "src/components", "src/app"  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
