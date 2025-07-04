@@ -1,59 +1,49 @@
-// 📄 Fayl: src/components/layout/HeaderMain.tsx
-// 🎯 Maqsad: Logo, Hotline, Category Select + Search + Button, Cart info — DW dizayni asosida 1px aniqlikda
-// 🧠 Texnologiya: Tailwind CSS + Next.js
-
 "use client";
 
 import Image from "next/image";
 import { ChevronDown, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function HeaderMain() {
-  const placeholderRef = useRef<HTMLSpanElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState("");
   const [borderDone, setBorderDone] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  const phrases = [
+    "iPhone 15 Pro Max",
+    "Samsung Galaxy S24",
+    "Smart TV 4K",
+    "AirPods Max",
+    "Oshxona uchun blender",
+    "Assalomu Aleykum, Xush kelibsiz!"
+  ];
 
   useEffect(() => {
-    if (!placeholderRef.current || isFocused || value || !borderDone) return;
-    const phrases = [
-      "iPhone 15 Pro Max",
-      "Samsung Galaxy S24",
-      "Smart TV 4K",
-      "AirPods Max",
-      "Oshxona uchun blender",
-      "Assalomu Aleykum, Xush kelibsiz!"
-    ];
-
-    let index = 0;
-    let charIndex = 0;
-    let currentPhrase = phrases[0];
-
-    const typeWriter = () => {
-      if (!placeholderRef.current || isFocused || value || !borderDone) return;
-      if (charIndex <= currentPhrase.length) {
-        placeholderRef.current.innerText = currentPhrase.substring(0, charIndex++);
-        setTimeout(typeWriter, 70);
-      } else {
-        setTimeout(() => {
-          index = (index + 1) % phrases.length;
-          currentPhrase = phrases[index];
-          charIndex = 0;
-          typeWriter();
-        }, 2000);
+    const interval = setInterval(() => {
+      if (!isFocused && !value && borderDone) {
+        setCurrentIndex((prev) => (prev + 1) % phrases.length);
       }
-    };
-
-    typeWriter();
+    }, 2000);
+    return () => clearInterval(interval);
   }, [isFocused, value, borderDone]);
 
   return (
     <div className="w-full bg-white py-[25px] border-b border-[#e5e5e5]">
       <div className="max-w-[1510px] w-full mx-auto px-[20px] grid grid-cols-12 items-center gap-[24px]">
+        
         {/* ✅ LOGO */}
         <div className="col-span-2 flex items-center gap-2 min-w-[140px]">
-          <Image src="/logo.png" alt="Logo" width={135} height={32} className="object-contain" />
+          <div className="w-[200px] h-[44px] relative">
+            <Image
+              src="/logo.png"
+              alt="Logo"
+              fill
+              className="object-contain"
+            />
+          </div>
         </div>
 
         {/* ✅ HOTLINE */}
@@ -76,7 +66,9 @@ export default function HeaderMain() {
           <div className="leading-[1.2]">
             <span className="text-[13px] text-gray-500">Call Center:</span>
             <h4 className="text-[16px] font-bold text-gray-900">
-              <a href="tel:+998781138280" className="hover:underline">+998 78 113 82 80</a>
+              <a href="tel:+998781138280" className="hover:underline">
+                +998 78 113 82 80
+              </a>
             </h4>
           </div>
         </div>
@@ -108,7 +100,7 @@ export default function HeaderMain() {
               placeholder=""
               title="Search Products"
               aria-label="Search Products"
-              className="flex-1 h-full text-[15px] px-4 bg-transparent outline-none text-black placeholder:text-gray-400 relative z-10"
+              className="flex-1 h-full text-[15px] px-4 bg-transparent outline-none text-black relative z-10"
               id="searchInput"
               onFocus={() => setIsFocused(true)}
               onBlur={() => !value && setIsFocused(false)}
@@ -138,12 +130,19 @@ export default function HeaderMain() {
               Search
             </button>
 
-            {/* 🪄 Typewriter yozuvi */}
             {!isFocused && !value && (
-              <span
-                ref={placeholderRef}
-                className="absolute left-[270px] pl-1 text-black text-[15px] pointer-events-none transition-opacity duration-500 h-full flex items-center z-0 opacity-30"
-              ></span>
+              <AnimatePresence mode="wait">
+                <motion.span
+                  key={phrases[currentIndex]}
+                  initial={{ opacity: 0, y: 14 }}
+                  animate={{ opacity: 0.7, y: 0 }}
+                  exit={{ opacity: 0, y: -14 }}
+                  transition={{ duration: 0.6, ease: "easeInOut" }}
+                  className="absolute left-[270px] pl-1 pointer-events-none h-full flex items-center z-0 text-[15px] italic bg-gradient-to-r from-[#9ca3af] to-[#6b7280] bg-clip-text text-transparent select-none"
+                >
+                  {phrases[currentIndex]}
+                </motion.span>
+              </AnimatePresence>
             )}
           </div>
         </div>
