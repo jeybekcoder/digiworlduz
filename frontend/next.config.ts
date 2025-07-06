@@ -1,7 +1,16 @@
-import type { NextConfig } from "next";
+// 📄 Fayl: next.config.ts
+// 🎯 Maqsad: next/image uchun Pixabay kabi tashqi rasm domenlariga ruxsat berish (yangi usul)
 
-const nextConfig: NextConfig = {
-  /* config options here */
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: "https",
+        hostname: "cdn.pixabay.com",
+        pathname: "/**",
+      },
+    ],
+  },
 };
 
 export default nextConfig;

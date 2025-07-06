@@ -34,19 +34,12 @@ export default function NavbarMain() {
     return () => window.removeEventListener("keydown", handleEscape);
   }, []);
 
-  const MenuItem = ({ label, href = "#", subItems }: { label: string; href?: string; subItems?: string[] }) => (
-    <li className="relative group focus-within:outline-none focus-within:ring-2 focus-within:ring-primary">
-      <Link
-        href={href}
-        className="block text-[14px] font-medium text-[#222] uppercase leading-[24px] h-[62px] py-[19px] px-0 hover:text-primary transition-all duration-300 ease-out"
-        role="menuitem"
-        tabIndex={0}
-        aria-current={pathname === href ? "page" : undefined}
-      >
-        {label}
-        {subItems && <ChevronDown className="w-4 h-4 ml-1 mt-[1px]" />}
+  const MenuItem = ({ label, href = "#", subItems = [] }: { label: string; href?: string; subItems?: string[] }) => (
+    <li className="relative group inline-block text-[13px] font-normal text-[#666] h-[62px] leading-[24px] transition-all duration-300 ease-out">
+      <Link href={href} className="block text-[14px] font-medium text-[#222] uppercase leading-[24px] h-[62px] pt-[19px] pb-[19px] px-0 text-left cursor-pointer transition-all duration-300 ease-out" role="menuitem" tabIndex={0} aria-current={pathname === href ? "page" : undefined}>
+        {label}{subItems.length > 0 && <ChevronDown className="w-4 h-4 ml-[0.5px] inline-block align-middle" />}
       </Link>
-      {subItems && (
+      {subItems.length > 0 && (
         <ul className="absolute left-0 mt-2 w-48 bg-white border rounded-md shadow-md z-20 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200" role="menu">
           {subItems.map((sub, idx) => (
             <li key={idx} role="none">
@@ -66,12 +59,12 @@ export default function NavbarMain() {
   );
 
   return (
-    <div className="w-full border-b bg-white text-sm">
+    <div className="w-full bg-white text-sm">
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-[62px]" aria-label="Main navigation">
           {/* Chapdagi menyu */}
-          <div className="flex items-start gap-6 ml-auto mr-4">
-            <ul className="inline-flex items-center gap-6" role="menubar">
+          <div className="flex items-start gap-6 mr-auto ml-4">
+            <ul className="inline-flex items-center gap-[52px]" role="menubar">
               <MenuItem label="Home" href="/" subItems={["Home Style 1", "Home Style 2", "Home Style 3", "Home Style 4"]} />
               <MenuItem label="Features" href="/features" subItems={["Product Type", "Product Features"]} />
               <MenuItem label="Pages" href="/pages" subItems={["About Us", "Contact"]} />
@@ -81,7 +74,7 @@ export default function NavbarMain() {
           </div>
 
           {/* Valyuta va til bloki */}
-          <div className="hidden md:flex items-center gap-1 pl-2 ml-2">
+          <div className="hidden md:flex items-center gap-1 pl-2 ml-auto">
             <div className="relative">
               <button
                 onClick={() => setCurrencyDropdown(!currencyDropdown)}

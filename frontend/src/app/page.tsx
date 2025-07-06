@@ -2,9 +2,14 @@
 // 🎯 Maqsad: DigiWorldUZ sahifasining silliqlashtirilgan (responsive, padding, rang) asosiy sahifasi
 // 🧱 Tailwind CSS bilan moslashtirilgan, dark mode bilan uyg‘un
 
+import "@fortawesome/fontawesome-svg-core/styles.css";
+import { config } from "@fortawesome/fontawesome-svg-core";
+config.autoAddCss = false;
+import MainLayout from "@/components/layout/MainLayout";
+
 export default function HomePage() {
   return (
-    <main className="min-h-screen w-full bg-white text-black dark:bg-[#111] dark:text-white transition-colors duration-300">
+    <MainLayout>
       <section className="max-w-[1440px] mx-auto px-4 pt-12">
         <h1 className="text-[20px] sm:text-[24px] font-semibold tracking-tight">
           DigiWorldUZ boshlang‘ich sahifa
@@ -13,8 +18,8 @@ export default function HomePage() {
           Bu yerda asosiy komponentlar bosqichma-bosqich joylashtiriladi.
         </p>
       </section>
-    </main>
-  )
+    </MainLayout>
+  );
 }
 
 // 💡 Izoh:
