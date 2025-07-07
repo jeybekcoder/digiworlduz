@@ -1,112 +1,115 @@
 // 📄 Fayl: src/components/sections/HomeSliderSection.tsx
-// 🎯 Maqsad: Slider + chap kategoriya menyusi (Shop by Department) — DW dizaynga 1:1 mos mega-menu + 5ta internetdan olingan texnikaga doir rasmli carousel bilan
+// 🎯 Maqsad: DW `index-3.html` asosidagi layout — container + row + col-xl-2 + col-xl-10 tuzilmasiga to‘liq moslashtirilgan mega-menu + slider + 1905x548px bo‘yicha width height to‘liq moslashtirish. Row padding EMAS, margin ishlatilgan (-mx-[12px]).
 
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Image from "next/image";
+import clsx from "clsx";
+import { motion, AnimatePresence } from "framer-motion";
+import { ChevronRight, ChevronDown } from "lucide-react";
 
 const sliderImages = [
-  "https://cdn.pixabay.com/photo/2016/03/31/20/11/computer-1294045_960_720.png",
-  "https://cdn.pixabay.com/photo/2014/04/03/00/39/monitor-309059_960_720.png",
-  "https://cdn.pixabay.com/photo/2016/11/29/12/54/computer-1869236_960_720.jpg",
-  "https://cdn.pixabay.com/photo/2017/01/06/19/15/internet-1952015_960_720.jpg",
-  "https://cdn.pixabay.com/photo/2017/03/31/18/58/computing-2199941_960_720.jpg",
+  "/assets/img/slider/03/slider-01.jpg",
+  "/assets/img/slider/03/slider-02.jpg",
+  "/assets/img/slider/03/slider-03.jpg",
 ];
 
 export default function HomeSliderSection() {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const [hovered, setHovered] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(true);
+  const [currentSlide, setCurrentSlide] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
+    }, 5000);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <section className="pt-[30px] bg-[#f5f5f5]">
-      <div className="max-w-[1510px] mx-auto px-[12px]">
+    <section className="slider__area pt-[30px] bg-[#f5f5f5] w-full">
+      <div className="w-full max-w-[1510px] mx-auto">
         <div className="flex flex-wrap -mx-[12px]">
-          {/* Kategoriya menyusi */}
-          <div className="hidden xl:block flex-[0_0_20%] max-w-[20%] w-[302px] px-[12px]">
-            <div className="cat__menu-wrapper bg-white w-[278px] h-[512px] overflow-hidden">
+          {/* Chap menyu */}
+          <div className="hidden xl:block w-[278px] px-[12px] bg-[#f5f5f5]">
+            <div className="cat__menu-wrapper bg-white w-full h-[518px] overflow-hidden">
               <div className="cat-toggle">
                 <button
                   type="button"
-                  className="cat-toggle-btn inline-block appearance-none bg-white text-[#222] text-[14px] font-medium uppercase h-[61px] leading-[61px] pl-[20px] w-full text-left border-b border-[#ebebeb] rounded-t-[3px]"
+                  className="cat-toggle-btn w-full text-left text-sm font-medium text-black uppercase border-b border-gray-200 py-4 px-5 flex items-center gap-2 transition-all duration-300 ease-out"
                   onClick={() => setIsMenuOpen(!isMenuOpen)}
                 >
-                  <i className="fas fa-bars mr-2"></i> Shop by department
+                  <i className="fas fa-bars"></i> Shop by department
                 </button>
                 {isMenuOpen && (
-                  <div
-                    className="cat__menu bg-white"
-                    onMouseLeave={() => setHovered(false)}
-                  >
+                  <div className="cat__menu">
                     <nav id="mobile-menu" className="block">
                       <ul className="text-[13px] text-[#666] font-normal">
-                        <li
-                          onMouseEnter={() => setHovered(true)}
-                          onMouseLeave={() => setHovered(false)}
-                          className="relative"
-                        >
-                          <a href="product.html">
-                            All Categories <i className="far fa-angle-down"></i>
+                        <li className="relative group">
+                          <a href="product.html" className="flex items-center justify-between px-5 h-[45px] hover:text-orange-500">
+                            All Categories <ChevronDown className="w-[14px] h-[14px]" />
                           </a>
-                          <ul
-                            className={`mega-menu absolute top-0 left-[278px] w-[800px] h-[466px] bg-white shadow-[4.316px_4.168px_20px_rgba(0,0,0,0.1)] text-[13px] text-[#666] font-normal list-disc pl-[50px] pr-[50px] pt-[40px] pb-[10px] z-[1] transition-all duration-300 ease-out ${
-                              hovered ? "opacity-100 visible" : "opacity-0 invisible"
-                            }`}
-                          >
-                            <li><a href="product.html">Shop Pages</a>
-                              <ul className="mega-item list-disc list-inside text-xs">
-                                <li><a href="product-details.html">Standard Shop Page</a></li>
-                                <li><a href="product-details.html">Shop Right Sidebar</a></li>
-                                <li><a href="product-details.html">Shop Left Sidebar</a></li>
-                                <li><a href="product-details.html">Shop 3 Column</a></li>
-                                <li><a href="product-details.html">Shop 4 Column</a></li>
-                              </ul>
-                            </li>
-                            <li><a href="product.html">Product Pages</a>
-                              <ul className="mega-item list-disc list-inside text-xs">
-                                <li><a href="product-details.html">Product Details</a></li>
-                                <li><a href="product-details.html">Product V2</a></li>
-                                <li><a href="product-details.html">Product V3</a></li>
-                                <li><a href="product-details.html">Varriable Product</a></li>
-                                <li><a href="product-details.html">External Product</a></li>
-                              </ul>
-                            </li>
-                            <li><a href="product.html">Other Pages</a>
-                              <ul className="mega-item list-disc list-inside text-xs">
-                                <li><a href="product-details.html">wishlist</a></li>
-                                <li><a href="product-details.html">Shopping Cart</a></li>
-                                <li><a href="product-details.html">Checkout</a></li>
-                                <li><a href="product-details.html">Login</a></li>
-                                <li><a href="product-details.html">Register</a></li>
-                              </ul>
-                            </li>
-                            <li><a href="product.html">Phone & Tablets</a>
-                              <ul className="mega-item list-disc list-inside text-xs">
-                                <li><a href="product-details.html">Catagory 1</a></li>
-                                <li><a href="product-details.html">Catagory 2</a></li>
-                                <li><a href="product-details.html">Catagory 3</a></li>
-                                <li><a href="product-details.html">Catagory 4</a></li>
-                              </ul>
-                            </li>
-                            <li><a href="product.html">Phone & Tablets</a>
-                              <ul className="mega-item list-disc list-inside text-xs">
-                                <li><a href="product-details.html">Catagory 1</a></li>
-                                <li><a href="product-details.html">Catagory 2</a></li>
-                                <li><a href="product-details.html">Catagory 3</a></li>
-                                <li><a href="product-details.html">Catagory 4</a></li>
-                              </ul>
-                            </li>
+                          <ul className="mega-menu absolute top-0 left-full w-[800px] h-[466px] bg-white shadow-lg p-10 opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 ease-out overflow-y-auto">
+                            {[{
+                              title: "Shop Pages",
+                              items: ["Standard Shop Page", "Shop Right Sidebar", "Shop Left Sidebar", "Shop 3 Column", "Shop 4 Column"]
+                            }, {
+                              title: "Product Pages",
+                              items: ["Product Details", "Product V2", "Product V3", "Varriable Product", "External Product"]
+                            }, {
+                              title: "Other Pages",
+                              items: ["wishlist", "Shopping Cart", "Checkout", "Login", "Register"]
+                            }, {
+                              title: "Phone & Tablets",
+                              items: ["Catagory 1", "Catagory 2", "Catagory 3", "Catagory 4"]
+                            }].map((group, idx) => (
+                              <li key={idx} className="mb-4">
+                                <a href="product.html" className="font-medium mb-2 block">{group.title}</a>
+                                <ul className="mega-item list-disc list-inside text-xs ml-4">
+                                  {group.items.map((sub, i) => (
+                                    <li key={i}><a href="product-details.html">{sub}</a></li>
+                                  ))}
+                                </ul>
+                              </li>
+                            ))}
                           </ul>
                         </li>
-                        <li><a href="product.html">Best Seller Products <span className="cat-label text-red-500">hot!</span></a></li>
-                        <li><a href="product.html">Top 10 Offers <span className="cat-label green text-green-500">new!</span></a></li>
-                        <li><a href="product.html">New Arrivals <i className="far fa-angle-down"></i></a></li>
-                        <li><a href="product.html">Phones & Tablets</a></li>
-                        <li><a href="product.html">Electronics & Digital</a></li>
-                        <li className="d-laptop-none"><a href="product.html">Fashion & Clothings</a></li>
-                        <li className="d-laptop-none"><a href="product.html">Jewelry & Watches</a></li>
-                        <li><a href="product.html">Health & Beauty</a></li>
-                        <li><a href="product.html">TV & Audio</a></li>
+                        <li>
+                          <a href="product.html" className="flex items-center px-5 h-[45px] hover:text-orange-500">
+                            Best Seller Products <span className="ml-2 text-white bg-[#f50963] px-1 rounded text-[10px] leading-[16px] font-semibold">hot!</span>
+                          </a>
+                        </li>
+                        <li>
+                          <a href="product.html" className="flex items-center px-5 h-[45px] hover:text-orange-500">
+                            Top 10 Offers <span className="ml-2 text-white bg-[#01b258] px-1 rounded text-[10px] leading-[16px] font-semibold">new!</span>
+                          </a>
+                        </li>
+                        <li className="relative group">
+                          <a href="product.html" className="flex items-center justify-between px-5 h-[45px] hover:text-orange-500">
+                            New Arrivals <ChevronDown className="w-[14px] h-[14px]" />
+                          </a>
+                          <ul className="submenu absolute top-0 left-full bg-white shadow-lg p-6 text-xs opacity-0 group-hover:opacity-100 invisible group-hover:visible transition-all duration-300 ease-out">
+                            <li><a href="product.html">Home Appliances</a></li>
+                            <li className="relative group/sub">
+                              <a href="product.html" className="flex items-center justify-between">
+                                Technology <ChevronRight className="w-3 h-3 ml-2" />
+                              </a>
+                              <ul className="submenu absolute top-0 left-full bg-white shadow-lg mt-0 ml-2 p-4 text-xs w-[180px]">
+                                <li><a href="product.html">Storage Devices</a></li>
+                                <li><a href="product.html">Monitors</a></li>
+                                <li><a href="product.html">Laptops</a></li>
+                              </ul>
+                            </li>
+                            <li><a href="product.html">Office Equipments</a></li>
+                          </ul>
+                        </li>
+                        {["Phones & Tablets", "Electronics & Digital", "Fashion & Clothings", "Jewelry & Watches", "Health & Beauty", "TV & Audio"].map((item, index) => (
+                          <li key={index}>
+                            <a href="product.html" className="px-5 h-[45px] flex items-center hover:text-orange-500">
+                              {item}
+                            </a>
+                          </li>
+                        ))}
                       </ul>
                     </nav>
                   </div>
@@ -116,23 +119,42 @@ export default function HomeSliderSection() {
           </div>
 
           {/* Slider */}
-          <div className="w-full xl:w-10/12 px-[12px]">
-            <div className="w-full rounded-md overflow-hidden">
-              <div className="grid grid-cols-1 animate-fade">
-                {sliderImages.map((src, index) => (
-                  <div key={index} className="w-full h-[400px] relative">
-                    <Image
-                      src={src}
-                      alt={`Slider image ${index + 1}`}
-                      fill
-                      className="object-cover rounded-md"
-                      priority={index === 0}
-                    />
-                  </div>
+          <div className="w-full xl:w-[1184px] px-[12px]">
+            <div className="relative w-full h-[518px] overflow-hidden shadow-md">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentSlide}
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.6 }}
+                  className="absolute top-0 left-0 w-full h-full"
+                >
+                  <Image
+                    src={sliderImages[currentSlide]}
+                    alt={`Slider image ${currentSlide + 1}`}
+                    fill
+                    className="object-cover"
+                    priority
+                  />
+                </motion.div>
+              </AnimatePresence>
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+                {sliderImages.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentSlide(idx)}
+                    className={clsx(
+                      "w-2.5 h-2.5 rounded-full transition-all",
+                      currentSlide === idx ? "bg-[#fcb900] w-5" : "bg-white/80"
+                    )}
+                    aria-label={`Go to slide ${idx + 1}`}
+                  />
                 ))}
               </div>
             </div>
           </div>
+
         </div>
       </div>
     </section>

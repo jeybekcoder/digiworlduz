@@ -1,14 +1,20 @@
 // 📄 Fayl: next.config.ts
-// 🎯 Maqsad: next/image uchun Pixabay kabi tashqi rasm domenlariga ruxsat berish (yangi usul)
+// 🎯 Maqsad: Unsplash (va boshqa manbalardan) rasm yuklash uchun Next.js `next/image` konfiguratsiyasi
 
+/** @type {import('next').NextConfig} */
 const nextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: "https",
-        hostname: "cdn.pixabay.com",
-        pathname: "/**",
+        protocol: 'https',
+        hostname: 'images.unsplash.com',
+        pathname: '/**',
       },
+      {
+        protocol: 'https',
+        hostname: 'cdn.pixabay.com',
+        pathname: '/**',
+      }
     ],
   },
 };
