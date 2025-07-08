@@ -1,5 +1,5 @@
 // 📄 Fayl: src/components/sections/HomeSliderSection.tsx
-// 🎯 Maqsad: DW `index-3.html` asosidagi layout — container + row + col-xl-2 + col-xl-10 tuzilmasiga to‘liq moslashtirilgan mega-menu + slider + 1510x518px bo‘yicha width height to‘liq moslashtirish. Row padding EMAS, margin ishlatilgan (-mx-[12px]) QAYTA TIKLANDI. Slider blokidan keyingi bo‘sh joylar tekshirib tozalandi.
+// 🌟 Maqsad: DW `index-3.html` asosidagi layout — container + row + col-xl-2 + col-xl-10 tuzilmasiga to‘liq moslashtirilgan mega-menu + slider + 1510x518px bo‘yicha width height to‘liq moslashtirish. Row padding EMAS, margin ishlatilgan (-mx-[12px]) QAYTA TIKLANDI. Slider blokidan keyingi bo‘sh joylar tekshirib tozalandi.
 
 "use client";
 
@@ -158,17 +158,17 @@ export default function HomeSliderSection() {
                 </motion.div>
               ))}
 
-              {/* Arrows - Glassmorphism */}
+              {/* Arrows - Circle style */}
               <button
                 onClick={prevSlide}
-                className="absolute left-4 top-1/2 -translate-y-1/2 backdrop-blur-md bg-white/40 hover:bg-white text-black w-[72px] h-[36px] rounded-[6px] shadow-lg flex items-center justify-center text-[44px] transition-all duration-300 z-30"
+                className="absolute left-4 top-1/2 -translate-y-1/2 backdrop-blur-md bg-white/40 hover:bg-white text-black w-[40px] h-[40px] rounded-full shadow-lg flex items-center justify-center text-[32px] transition-all duration-300 z-30"
                 aria-label="Previous slide"
               >
                 ‹
               </button>
               <button
                 onClick={nextSlide}
-                className="absolute right-4 top-1/2 -translate-y-1/2 backdrop-blur-md bg-white/40 hover:bg-white text-black w-[72px] h-[36px] rounded-[6px] shadow-lg flex items-center justify-center text-[44px] transition-all duration-300 z-30"
+                className="absolute right-4 top-1/2 -translate-y-1/2 backdrop-blur-md bg-white/40 hover:bg-white text-black w-[40px] h-[40px] rounded-full shadow-lg flex items-center justify-center text-[32px] transition-all duration-300 z-30"
                 aria-label="Next slide"
               >
                 ›

@@ -1,5 +1,6 @@
 // 📄 Fayl: src/components/layout/NavbarMain.tsx
-// 🎯 Maqsad: DW dizayni asosida ARIA validatsiyadan to‘liq o‘tadigan, menyular + currency/lang dropdownlarni o‘z ichiga olgan responsive navbar (mobil menyu sheet bilan)
+// 🎯 Maqsad: DW dizayni asosida ARIA validatsiyadan to‘liq o‘tadigan, menyular + currency/lang dropdownlarni o‘z ichiga olgan responsive navbar (mobil menyu sheet bilan).
+// 🔧 Yangilik: Barcha submenu (asosiy menyu, til, valyuta) elementlari parent <NavbarMain> pastki qismidan chiqadigan holatga moslashtirildi (top-full origin-top).
 
 "use client";
 
@@ -33,7 +34,7 @@ export default function NavbarMain() {
         {label}{subItems.length > 0 && <ChevronDown className="w-4 h-4 ml-[0.5px] inline-block align-middle" />}
       </Link>
       {subItems.length > 0 && (
-        <ul className="absolute left-0 mt-2 w-48 bg-white border rounded-md shadow-md z-20 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200" role="menu">
+        <ul className="absolute left-0 top-full mt-0 origin-top w-48 bg-white border rounded-md shadow-md z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200" role="menu">
           {subItems.map((sub, idx) => (
             <li key={idx} role="none">
               <Link
@@ -52,9 +53,9 @@ export default function NavbarMain() {
   );
 
   return (
-    <div className="w-full bg-white text-sm">
+    <div className="w-full bg-white text-sm relative z-50">
       <div className="container mx-auto px-4">
-        <div className="flex items-center justify-between h-[62px]" aria-label="Main navigation">
+        <div className="flex items-center justify-between h-[62px] relative" aria-label="Main navigation">
           {/* Chapdagi menyu */}
           <div className="flex items-start gap-6 mr-auto ml-4">
             <ul className="inline-flex items-center gap-[52px]" role="menubar">
@@ -79,7 +80,7 @@ export default function NavbarMain() {
                 <ChevronDown className="w-4 h-4 ml-1 mt-[1px]" />
               </button>
               {currencyDropdown && (
-                <ul className="absolute right-0 mt-2 w-28 bg-white border rounded shadow z-20" role="menu">
+                <ul className="absolute right-0 top-full mt-0 origin-top w-28 bg-white border rounded shadow z-50" role="menu">
                   {["USD", "UZS", "RUB"].map((cur) => (
                     <li key={cur} role="none">
                       <button
@@ -111,7 +112,7 @@ export default function NavbarMain() {
                 <ChevronDown className="w-4 h-4 ml-1 mt-[1px]" />
               </button>
               {languageDropdown && (
-                <ul className="absolute right-0 mt-2 w-28 bg-white border rounded shadow z-20" role="menu">
+                <ul className="absolute right-0 top-full mt-0 origin-top w-28 bg-white border rounded shadow z-50" role="menu">
                   {["UZ", "RU", "EN"].map((lang) => (
                     <li key={lang} role="none">
                       <button
