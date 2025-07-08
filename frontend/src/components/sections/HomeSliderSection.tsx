@@ -1,38 +1,52 @@
 // 📄 Fayl: src/components/sections/HomeSliderSection.tsx
-// 🎯 Maqsad: DW `index-3.html` asosidagi layout — container + row + col-xl-2 + col-xl-10 tuzilmasiga to‘liq moslashtirilgan mega-menu + slider + 1905x548px bo‘yicha width height to‘liq moslashtirish. Row padding EMAS, margin ishlatilgan (-mx-[12px]).
+// 🎯 Maqsad: DW `index-3.html` asosidagi layout — container + row + col-xl-2 + col-xl-10 tuzilmasiga to‘liq moslashtirilgan mega-menu + slider + 1510x518px bo‘yicha width height to‘liq moslashtirish. Row padding EMAS, margin ishlatilgan (-mx-[12px]) QAYTA TIKLANDI. Slider blokidan keyingi bo‘sh joylar tekshirib tozalandi.
 
 "use client";
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import clsx from "clsx";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
+import { useSwipeable } from "react-swipeable";
 import { ChevronRight, ChevronDown } from "lucide-react";
 
 const sliderImages = [
-  "/assets/img/slider/03/slider-01.jpg",
-  "/assets/img/slider/03/slider-02.jpg",
-  "/assets/img/slider/03/slider-03.jpg",
+  "/assets/img/home-slider/slider-1.jpg",
+  "/assets/img/home-slider/slider-2.png",
+  "/assets/img/home-slider/slider-3.jpg",
 ];
 
 export default function HomeSliderSection() {
   const [isMenuOpen, setIsMenuOpen] = useState(true);
   const [currentSlide, setCurrentSlide] = useState(0);
 
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + sliderImages.length) % sliderImages.length);
+  };
+
+  const handlers = useSwipeable({
+    onSwipedLeft: nextSlide,
+    onSwipedRight: prevSlide,
+    preventScrollOnSwipe: true,
+    trackMouse: true,
+  });
+
   useEffect(() => {
-    const interval = setInterval(() => {
-      setCurrentSlide((prev) => (prev + 1) % sliderImages.length);
-    }, 5000);
+    const interval = setInterval(nextSlide, 5000);
     return () => clearInterval(interval);
   }, []);
 
   return (
     <section className="slider__area pt-[30px] bg-[#f5f5f5] w-full">
-      <div className="w-[1905px] mx-auto">
-        <div className="flex flex-wrap -mx-[12px]">
+      <div className="w-[1510px] h-[518px] px-[12px] mx-auto">
+        <div className="w-[1510px] h-[518px] flex flex-wrap -mx-[12px]">
           {/* Chap menyu */}
-          <div className="hidden xl:block w-[278px] px-[12px] bg-[#f5f5f5]">
-            <div className="cat__menu-wrapper bg-white w-full h-[518px] overflow-hidden">
+          <div className="hidden xl:block w-[302px] h-[518px] px-[12px] bg-[#f5f5f5]">
+            <div className="cat__menu-wrapper bg-white w-[278px] h-[518px] overflow-hidden">
               <div className="cat-toggle">
                 <button
                   type="button"
@@ -43,8 +57,8 @@ export default function HomeSliderSection() {
                 </button>
                 {isMenuOpen && (
                   <div className="cat__menu">
-                    <nav id="mobile-menu" className="block">
-                      <ul className="text-[13px] text-[#666] font-normal">
+                    <nav id="mobile-menu" className="block" aria-label="Main Categories">
+                      <ul className="text-[13px] text-[#666] font-normal divide-y divide-gray-200">
                         <li className="relative group">
                           <a href="product.html" className="flex items-center justify-between px-5 h-[45px] hover:text-orange-500">
                             All Categories <ChevronDown className="w-[14px] h-[14px]" />
@@ -118,28 +132,50 @@ export default function HomeSliderSection() {
             </div>
           </div>
 
-          {/* Slider */}
-          <div className="w-full xl:w-[1184px] px-[12px]">
-            <div className="relative w-full h-[518px] overflow-hidden shadow-md">
-              <AnimatePresence mode="wait">
+          <div className="w-[1208px] h-[518px] px-[12px] flex">
+            <div
+              className="relative w-[1184px] h-[518px] overflow-hidden shadow-md shrink-0"
+              {...handlers}
+            >
+              {sliderImages.map((img, index) => (
                 <motion.div
-                  key={currentSlide}
-                  initial={{ opacity: 0 }}
-                  animate={{ opacity: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 0.6 }}
-                  className="absolute top-0 left-0 w-full h-full"
+                  key={index}
+                  initial={{ x: index > currentSlide ? 300 : -300, opacity: 0 }}
+                  animate={{ x: 0, opacity: 1 }}
+                  exit={{ x: index > currentSlide ? -300 : 300, opacity: 0 }}
+                  transition={{ duration: 0.8, ease: "easeInOut" }}
+                  className={clsx(
+                    "absolute top-0 left-0 w-full h-full",
+                    index === currentSlide ? "z-20" : "z-10"
+                  )}
                 >
                   <Image
-                    src={sliderImages[currentSlide]}
-                    alt={`Slider image ${currentSlide + 1}`}
+                    src={img}
+                    alt={`Slider image ${index + 1}`}
                     fill
-                    className="object-cover"
-                    priority
+                    className="object-cover rounded-[3px]"
+                    priority={index === currentSlide}
                   />
                 </motion.div>
-              </AnimatePresence>
-              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-10">
+              ))}
+
+              {/* Arrows */}
+              <button
+                onClick={prevSlide}
+                className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-white/80 hover:bg-white p-2 rounded-full shadow"
+                aria-label="Previous slide"
+              >
+                ‹
+              </button>
+              <button
+                onClick={nextSlide}
+                className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-white/80 hover:bg-white p-2 rounded-full shadow"
+                aria-label="Next slide"
+              >
+                ›
+              </button>
+
+              <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
                 {sliderImages.map((_, idx) => (
                   <button
                     key={idx}

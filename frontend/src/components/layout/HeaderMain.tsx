@@ -38,7 +38,7 @@ export default function HeaderMain() {
         <div className="col-span-2 flex items-center gap-2 min-w-[140px]">
           <div className="w-[200px] h-[44px] relative">
             <Image
-              src="/logo.png"
+              src="/assets/img/logo/logo.png"
               alt="Logo"
               fill
               className="object-contain"
