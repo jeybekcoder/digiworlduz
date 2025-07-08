@@ -4,16 +4,9 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronDown, Menu } from "lucide-react";
+import { ChevronDown } from "lucide-react";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
-import {
-  Sheet,
-  SheetContent,
-  SheetHeader,
-  SheetTitle,
-  SheetTrigger,
-} from "@/components/ui/sheet";
 import { useSettingsStore } from "@/store/useSettingsStore";
 
 export default function NavbarMain() {
