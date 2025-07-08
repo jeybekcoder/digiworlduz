@@ -28,7 +28,7 @@ export default function HomeSliderSection() {
 
   return (
     <section className="slider__area pt-[30px] bg-[#f5f5f5] w-full">
-      <div className="w-full max-w-[1510px] mx-auto">
+      <div className="w-[1905px] mx-auto">
         <div className="flex flex-wrap -mx-[12px]">
           {/* Chap menyu */}
           <div className="hidden xl:block w-[278px] px-[12px] bg-[#f5f5f5]">
