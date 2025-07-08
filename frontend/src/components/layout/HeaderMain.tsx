@@ -1,3 +1,7 @@
+// 📄 Fayl: src/components/layout/HeaderMain.tsx
+// 🎯 Maqsad: Pixel-perfect DW dizayndagi header (logo, hotline, category select, search, cart)
+// ✅ TECHUS: Next.js + Tailwind CSS + Framer Motion
+
 "use client";
 
 import Image from "next/image";
@@ -28,12 +32,12 @@ export default function HeaderMain() {
       }
     }, 2000);
     return () => clearInterval(interval);
-  }, [isFocused, value, borderDone]);
+  }, [isFocused, value, borderDone, phrases.length]);
 
   return (
     <div className="w-full bg-white py-[25px] border-b border-[#e5e5e5]">
       <div className="max-w-[1510px] w-full mx-auto px-[20px] grid grid-cols-12 items-center gap-[24px]">
-        
+
         {/* ✅ LOGO */}
         <div className="col-span-2 flex items-center gap-2 min-w-[140px]">
           <div className="w-[200px] h-[44px] relative">
