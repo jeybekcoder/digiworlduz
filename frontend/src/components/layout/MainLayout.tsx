@@ -1,5 +1,6 @@
 // 📄 Fayl: src/components/layout/MainLayout.tsx
-// 🎯 Maqsad: <main> konteyneri ichiga HomeSliderSection va HomeFeaturesSection komponentlarini ulash. Eni 1905px bo‘lishi uchun `max-w-[1905px] mx-auto` klassi ishlatilgan
+// 🎯 Maqsad: <main> konteyneri ichiga HomeSliderSection, HomeFeaturesSection, HomeBannersSection komponentlarini ulash
+// 📦 Texnologiyalar: React (Next.js client component), Tailwind CSS, Dynamic Preloader bilan birga
 
 "use client";
 
@@ -7,6 +8,7 @@ import React, { useEffect, useState } from "react";
 import Preloader from "@/components/Preloader";
 import HomeSliderSection from "@/components/sections/HomeSliderSection";
 import HomeFeaturesSection from "@/components/sections/HomeFeaturesSection";
+import HomeBannersSection from "@/components/sections/HomeBannersSection";
 
 export default function MainLayout({
   children,
@@ -36,6 +38,9 @@ export default function MainLayout({
 
           {/* 🧩 Xizmat afzalliklari */}
           <HomeFeaturesSection isLoaded={isLoaded} />
+
+          {/* 🖼 Bannerlar bo‘limi */}
+          <HomeBannersSection />
 
           {/* 🔗 Keyingi bo‘limlar */}
           {children}
