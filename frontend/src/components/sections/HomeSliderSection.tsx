@@ -131,7 +131,6 @@ export default function HomeSliderSection() {
               </div>
             </div>
           </div>
-
           <div className="w-[1208px] h-[518px] px-[12px] flex">
             <div
               className="relative w-[1184px] h-[518px] overflow-hidden shadow-md shrink-0"
@@ -159,22 +158,23 @@ export default function HomeSliderSection() {
                 </motion.div>
               ))}
 
-              {/* Arrows */}
+              {/* Arrows - Glassmorphism */}
               <button
                 onClick={prevSlide}
-                className="absolute left-4 top-1/2 -translate-y-1/2 z-30 bg-white/80 hover:bg-white p-2 rounded-full shadow"
+                className="absolute left-4 top-1/2 -translate-y-1/2 backdrop-blur-md bg-white/40 hover:bg-white text-black w-[72px] h-[36px] rounded-[6px] shadow-lg flex items-center justify-center text-[44px] transition-all duration-300 z-30"
                 aria-label="Previous slide"
               >
                 ‹
               </button>
               <button
                 onClick={nextSlide}
-                className="absolute right-4 top-1/2 -translate-y-1/2 z-30 bg-white/80 hover:bg-white p-2 rounded-full shadow"
+                className="absolute right-4 top-1/2 -translate-y-1/2 backdrop-blur-md bg-white/40 hover:bg-white text-black w-[72px] h-[36px] rounded-[6px] shadow-lg flex items-center justify-center text-[44px] transition-all duration-300 z-30"
                 aria-label="Next slide"
               >
                 ›
               </button>
 
+              {/* Dots */}
               <div className="absolute bottom-4 left-1/2 transform -translate-x-1/2 flex gap-2 z-20">
                 {sliderImages.map((_, idx) => (
                   <button
@@ -190,7 +190,6 @@ export default function HomeSliderSection() {
               </div>
             </div>
           </div>
-
         </div>
       </div>
     </section>
