@@ -1,5 +1,5 @@
 // 📄 Fayl: src/components/layout/MainLayout.tsx
-// 🎯 Maqsad: <main> konteyneri ichiga HomeSliderSection, HomeFeaturesSection, HomeBannersSection komponentlarini ulash
+// 🎯 Maqsad: <main> konteyneri ichiga HomeSliderSection, HomeFeaturesSection, HomeBannersSection, DealsOfTheDaySection komponentlarini ulash
 // 📦 Texnologiyalar: React (Next.js client component), Tailwind CSS, Dynamic Preloader bilan birga
 
 "use client";
@@ -9,6 +9,7 @@ import Preloader from "@/components/Preloader";
 import HomeSliderSection from "@/components/sections/HomeSliderSection";
 import HomeFeaturesSection from "@/components/sections/HomeFeaturesSection";
 import HomeBannersSection from "@/components/sections/HomeBannersSection";
+import DealsOfTheDaySection from "@/components/sections/DealsOfTheDaySection"; // 🛠 Eslatma: keen-slider va react-countdown o'rnatilishi kerak: npm install keen-slider react-countdown
 
 export default function MainLayout({
   children,
@@ -41,6 +42,9 @@ export default function MainLayout({
 
           {/* 🖼 Bannerlar bo‘limi */}
           <HomeBannersSection />
+
+          {/* 🔥 Deals Of The Day bo‘limi */}
+          <DealsOfTheDaySection />
 
           {/* 🔗 Keyingi bo‘limlar */}
           {children}

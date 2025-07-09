@@ -1,5 +1,5 @@
 // 📄 Fayl: next.config.ts
-// 🎯 Maqsad: Unsplash (va boshqa manbalardan) rasm yuklash uchun Next.js `next/image` konfiguratsiyasi
+// 🎯 Maqsad: Unsplash, Pixabay va Source.unsplash.com kabi tashqi manbalardan rasm yuklashni ruxsat berish.
 
 /** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -14,7 +14,12 @@ const nextConfig = {
         protocol: 'https',
         hostname: 'cdn.pixabay.com',
         pathname: '/**',
-      }
+      },
+      {
+        protocol: 'https',
+        hostname: 'source.unsplash.com', // ✅ Vaqtinchalik test uchun qo‘shildi
+        pathname: '/**',
+      },
     ],
   },
 };
