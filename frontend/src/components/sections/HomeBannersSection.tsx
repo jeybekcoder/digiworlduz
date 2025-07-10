@@ -11,17 +11,20 @@ import React from "react";
 const bannerData = [
   {
     id: 1,
-    image: "/assets/img/banner/banner-1.jpg",
+    image:
+      "https://images.unsplash.com/photo-1551963831-b3b1ca40c98e?auto=format&fit=crop&w=376&q=80",
     link: "/product-details",
   },
   {
     id: 2,
-    image: "/assets/img/banner/banner-2.jpg",
+    image:
+      "https://images.unsplash.com/photo-1551782450-a2132b4ba21d?auto=format&fit=crop&w=376&q=80",
     link: "/product-details",
   },
   {
     id: 3,
-    image: "/assets/img/banner/banner-3.jpg",
+    image:
+      "https://images.unsplash.com/photo-1522770179533-24471fcdba45?auto=format&fit=crop&w=376&q=80",
     link: "/product-details",
   },
 ];
