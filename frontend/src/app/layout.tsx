@@ -16,7 +16,7 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="uz">
       <head>
         {/* ✅ Google Fonts: Rubik */}
         <link
@@ -32,10 +32,10 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         <HeaderTop />
 
         {/* 🔳 Asosiy header: logo, search, hotline */}
-        <HeaderMain />
+        <HeaderMain withHotline={true} withCart={true} />
 
         {/* 📚 Asosiy navigatsiya menyu */}
-        <NavbarMain />
+        <NavbarMain variant="default" transparent={false} />
 
         {/* 🔗 Sahifadagi kontent */}
         {children}

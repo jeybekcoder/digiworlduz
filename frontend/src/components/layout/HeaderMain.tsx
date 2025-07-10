@@ -8,8 +8,14 @@ import Image from "next/image";
 import { ChevronDown, X } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { siteConfig } from "@/config/site";
 
-export default function HeaderMain() {
+interface HeaderMainProps {
+  withHotline?: boolean;
+  withCart?: boolean;
+}
+
+export default function HeaderMain({ withHotline = true, withCart = true }: HeaderMainProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [isFocused, setIsFocused] = useState(false);
   const [value, setValue] = useState("");
@@ -34,6 +40,14 @@ export default function HeaderMain() {
     return () => clearInterval(interval);
   }, [isFocused, value, borderDone, phrases.length]);
 
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (value.trim()) {
+      // console.log("Searching for:", value);
+      alert(`Qidirilmoqda: ${value}`);
+    }
+  };
+
   return (
     <div className="w-full bg-white py-[25px] border-b border-[#e5e5e5]">
       <div className="max-w-[1510px] w-full mx-auto px-[20px] grid grid-cols-12 items-center gap-[24px]">
@@ -42,7 +56,7 @@ export default function HeaderMain() {
         <div className="col-span-2 flex items-center gap-2 min-w-[140px]">
           <div className="w-[200px] h-[44px] relative">
             <Image
-              src="/assets/img/logo/logo.png"
+              src={siteConfig.logo}
               alt="Logo"
               fill
               className="object-contain"
@@ -51,35 +65,38 @@ export default function HeaderMain() {
         </div>
 
         {/* ✅ HOTLINE */}
-        <div className="group col-span-2 hidden lg:flex items-center gap-[6px] justify-center">
-          <div className="flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white border-[2px] border-[#fde08d] shadow-sm transition-all duration-300 group-hover:bg-[#fcb900]">
-            <svg
-              width="25"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#fcb900"
-              strokeWidth="2.2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="transition-all duration-300 group-hover:stroke-black"
-            >
-              <path d="M22 16.92V19a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.13.81.31 1.6.55 2.38a2 2 0 0 1-.45 2.11l-.27.27a16 16 0 0 0 6.29 6.29l.27-.27a2 2 0 0 1 2.11-.45c.78.24 1.57.42 2.38.55A2 2 0 0 1 22 16.92z" />
-            </svg>
+        {withHotline && (
+          <div className="group col-span-2 hidden lg:flex items-center gap-[6px] justify-center">
+            <div className="flex items-center justify-center w-[50px] h-[50px] rounded-full bg-white border-[2px] border-[#fde08d] shadow-sm transition-all duration-300 group-hover:bg-[#fcb900]">
+              <svg
+                width="25"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#fcb900"
+                strokeWidth="2.2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="transition-all duration-300 group-hover:stroke-black"
+              >
+                <path d="M22 16.92V19a2 2 0 0 1-2.18 2A19.8 19.8 0 0 1 3 5.18 2 2 0 0 1 5 3h2.09a2 2 0 0 1 2 1.72c.13.81.31 1.6.55 2.38a2 2 0 0 1-.45 2.11l-.27.27a16 16 0 0 0 6.29 6.29l.27-.27a2 2 0 0 1 2.11-.45c.78.24 1.57.42 2.38.55A2 2 0 0 1 22 16.92z" />
+              </svg>
+            </div>
+            <div className="leading-[1.2]">
+              <span className="text-[13px] text-gray-500">Call Center:</span>
+              <h4 className="text-[16px] font-bold text-gray-900">
+                <a href={`tel:${siteConfig.hotline}`} className="hover:underline">
+                  {siteConfig.hotline}
+                </a>
+              </h4>
+            </div>
           </div>
-          <div className="leading-[1.2]">
-            <span className="text-[13px] text-gray-500">Call Center:</span>
-            <h4 className="text-[16px] font-bold text-gray-900">
-              <a href="tel:+998781138280" className="hover:underline">
-                +998 78 113 82 80
-              </a>
-            </h4>
-          </div>
-        </div>
+        )}
 
         {/* ✅ SEARCH BAR */}
         <div className="col-span-6 h-[51px]">
-          <div
+          <form
+            onSubmit={handleSubmit}
             className="flex items-center h-full border-[2px] border-[#fcb900] rounded-[30px] overflow-hidden bg-white relative transition-all duration-700"
             onTransitionEnd={(e) => {
               if (e.propertyName === "border-color") {
@@ -127,6 +144,7 @@ export default function HeaderMain() {
               </button>
             )}
             <button
+              type="submit"
               className="absolute right-0 bg-[#fcb900] text-[15px] text-black font-medium px-8 h-full rounded-r-[30px]"
               aria-label="Search"
               title="Search"
@@ -148,39 +166,41 @@ export default function HeaderMain() {
                 </motion.span>
               </AnimatePresence>
             )}
-          </div>
+          </form>
         </div>
 
         {/* ✅ CART INFO */}
-        <div className="group col-span-2 hidden lg:flex items-center gap-3 justify-end">
-          <a
-            href="javascript:void(0);"
-            className="relative w-[50px] h-[50px] rounded-full border-[2px] border-[#fcb900] bg-white flex items-center justify-center text-white text-[13px] font-normal transition-all duration-300 ease-out group-hover:bg-[#fcb900]"
-          >
-            <svg
-              width="22"
-              height="22"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="#fcb900"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="transition-all duration-300 group-hover:stroke-black"
+        {withCart && (
+          <div className="group col-span-2 hidden lg:flex items-center gap-3 justify-end">
+            <a
+              href="javascript:void(0);"
+              className="relative w-[50px] h-[50px] rounded-full border-[2px] border-[#fcb900] bg-white flex items-center justify-center text-white text-[13px] font-normal transition-all duration-300 ease-out group-hover:bg-[#fcb900]"
             >
-              <circle cx="9" cy="21" r="1" />
-              <circle cx="20" cy="21" r="1" />
-              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61l1.38-7.39H6" />
-            </svg>
-            <span className="absolute -top-1 -right-1 bg-[#fcb900] text-[10px] font-semibold text-white w-5 h-5 rounded-full flex items-center justify-center">
-              01
-            </span>
-          </a>
-          <div className="leading-[1.1]">
-            <p className="text-xs text-gray-500">My Cart:</p>
-            <p className="text-sm font-semibold text-gray-800">$ 255.00</p>
+              <svg
+                width="22"
+                height="22"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="#fcb900"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                className="transition-all duration-300 group-hover:stroke-black"
+              >
+                <circle cx="9" cy="21" r="1" />
+                <circle cx="20" cy="21" r="1" />
+                <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61l1.38-7.39H6" />
+              </svg>
+              <span className="absolute -top-1 -right-1 bg-[#fcb900] text-[10px] font-semibold text-white w-5 h-5 rounded-full flex items-center justify-center">
+                01
+              </span>
+            </a>
+            <div className="leading-[1.1]">
+              <p className="text-xs text-gray-500">My Cart:</p>
+              <p className="text-sm font-semibold text-gray-800">$ 255.00</p>
+            </div>
           </div>
-        </div>
+        )}
       </div>
     </div>
   );

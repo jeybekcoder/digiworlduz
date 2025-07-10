@@ -5,14 +5,20 @@
 "use client";
 
 import Link from "next/link";
-import { ChevronDown } from "lucide-react";
+import clsx from "clsx";
 import { useState, useEffect } from "react";
 import { usePathname } from "next/navigation";
 import { useSettingsStore } from "@/store/useSettingsStore";
+import MenuItem from "@/components/layout/MenuItem";
+import Dropdown from "@/components/ui/Dropdown";
 
-export default function NavbarMain() {
-  const [currencyDropdown, setCurrencyDropdown] = useState(false);
-  const [languageDropdown, setLanguageDropdown] = useState(false);
+interface NavbarMainProps {
+  variant?: "default" | "compact";
+  transparent?: boolean;
+}
+
+export default function NavbarMain({ variant = "default", transparent = false }: NavbarMainProps) {
+  const [activeDropdown, setActiveDropdown] = useState<null | "currency" | "language" >(null);
   const pathname = usePathname();
 
   const { currency, language, changeCurrency, changeLanguage } = useSettingsStore();
@@ -20,45 +26,23 @@ export default function NavbarMain() {
   useEffect(() => {
     const handleEscape = (e: KeyboardEvent) => {
       if (e.key === "Escape") {
-        setCurrencyDropdown(false);
-        setLanguageDropdown(false);
+        setActiveDropdown(null);
       }
     };
     window.addEventListener("keydown", handleEscape);
     return () => window.removeEventListener("keydown", handleEscape);
   }, []);
 
-  const MenuItem = ({ label, href = "#", subItems = [] }: { label: string; href?: string; subItems?: string[] }) => (
-    <li className="relative group inline-block text-[13px] font-normal text-[#666] h-[62px] leading-[24px] transition-all duration-300 ease-out">
-      <Link href={href} className="block text-[14px] font-medium text-[#222] uppercase leading-[24px] h-[62px] pt-[19px] pb-[19px] px-0 text-left cursor-pointer transition-all duration-300 ease-out" role="menuitem" tabIndex={0} aria-current={pathname === href ? "page" : undefined}>
-        {label}{subItems.length > 0 && <ChevronDown className="w-4 h-4 ml-[0.5px] inline-block align-middle" />}
-      </Link>
-      {subItems.length > 0 && (
-        <ul className="absolute left-0 top-full mt-0 origin-top w-48 bg-white border rounded-md shadow-md z-50 opacity-0 invisible group-hover:opacity-100 group-hover:visible group-focus-within:opacity-100 group-focus-within:visible transition-all duration-200" role="menu">
-          {subItems.map((sub, idx) => (
-            <li key={idx} role="none">
-              <Link
-                href="#"
-                className="block px-4 py-2 text-sm hover:bg-gray-100"
-                role="menuitem"
-                tabIndex={0}
-              >
-                {sub}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-    </li>
-  );
-
   return (
-    <div className="w-full bg-white text-sm relative z-50">
+    <div className={clsx(
+      "w-full text-sm relative z-50",
+      transparent ? "bg-transparent" : "bg-white"
+    )}>
       <div className="container mx-auto px-4">
         <div className="flex items-center justify-between h-[62px] relative" aria-label="Main navigation">
           {/* Chapdagi menyu */}
-          <div className="flex items-start gap-6 mr-auto ml-4">
-            <ul className="inline-flex items-center gap-[52px]" role="menubar">
+          <div className={clsx("flex items-start mr-auto ml-4", variant === "compact" ? "gap-3" : "gap-6")}> 
+            <ul className={clsx("inline-flex items-center", variant === "compact" ? "gap-4 flex-wrap" : "gap-[52px] truncate")} role="menubar">
               <MenuItem label="Home" href="/" subItems={["Home Style 1", "Home Style 2", "Home Style 3", "Home Style 4"]} />
               <MenuItem label="Features" href="/features" subItems={["Product Type", "Product Features"]} />
               <MenuItem label="Pages" href="/pages" subItems={["About Us", "Contact"]} />
@@ -69,67 +53,27 @@ export default function NavbarMain() {
 
           {/* Valyuta va til bloki */}
           <div className="hidden md:flex items-center gap-1 pl-2 ml-auto">
-            <div className="relative">
-              <button
-                onClick={() => setCurrencyDropdown(!currencyDropdown)}
-                aria-haspopup="true"
-                aria-expanded={currencyDropdown}
-                className="flex items-center gap-1 hover:text-primary text-sm text-[#222]"
-              >
-                {currency}
-                <ChevronDown className="w-4 h-4 ml-1 mt-[1px]" />
-              </button>
-              {currencyDropdown && (
-                <ul className="absolute right-0 top-full mt-0 origin-top w-28 bg-white border rounded shadow z-50" role="menu">
-                  {["USD", "UZS", "RUB"].map((cur) => (
-                    <li key={cur} role="none">
-                      <button
-                        onClick={() => {
-                          changeCurrency(cur);
-                          setCurrencyDropdown(false);
-                        }}
-                        className="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
-                        role="menuitem"
-                      >
-                        {cur}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
-
+            <Dropdown
+              label="Currency"
+              value={currency}
+              options={["USD", "UZS", "RUB"]}
+              onChange={changeCurrency}
+              isOpen={activeDropdown === "currency"}
+              setOpen={() =>
+                setActiveDropdown((prev) => (prev === "currency" ? null : "currency"))
+              }
+            />
             <div className="h-5 w-px bg-gray-300 mx-1" />
-
-            <div className="relative">
-              <button
-                onClick={() => setLanguageDropdown(!languageDropdown)}
-                aria-haspopup="true"
-                aria-expanded={languageDropdown}
-                className="flex items-center gap-1 hover:text-primary text-sm text-[#222]"
-              >
-                {language}
-                <ChevronDown className="w-4 h-4 ml-1 mt-[1px]" />
-              </button>
-              {languageDropdown && (
-                <ul className="absolute right-0 top-full mt-0 origin-top w-28 bg-white border rounded shadow z-50" role="menu">
-                  {["UZ", "RU", "EN"].map((lang) => (
-                    <li key={lang} role="none">
-                      <button
-                        onClick={() => {
-                          changeLanguage(lang);
-                          setLanguageDropdown(false);
-                        }}
-                        className="block w-full px-4 py-2 text-left text-sm hover:bg-gray-100"
-                        role="menuitem"
-                      >
-                        {lang}
-                      </button>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </div>
+            <Dropdown
+              label="Language"
+              value={language}
+              options={["UZ", "RU", "EN"]}
+              onChange={changeLanguage}
+              isOpen={activeDropdown === "language"}
+              setOpen={() =>
+                setActiveDropdown((prev) => (prev === "language" ? null : "language"))
+              }
+            />
           </div>
         </div>
       </div>

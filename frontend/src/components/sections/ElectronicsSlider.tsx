@@ -1,6 +1,5 @@
 // 📄 Fayl: src/components/sections/ElectronicsSlider.tsx
 // 📦 Maqsad: Electronic & Digital Products slider — useAutoplaySlider bilan modular, responsive va reusabilityga tayyor qilingan versiya
-// 💡 Taklif: Har bir slider bo‘limi mustaqil komponentda bo‘lishi kerak — bu arxitektura aniqroq, testga yengil va professional
 
 "use client";
 
@@ -55,7 +54,7 @@ export default function ElectronicsSlider() {
           price={item.price}
           rating={item.rating}
           slug={item.slug}
-          isCentered
+          variant="default"
         />
       </div>
     ))

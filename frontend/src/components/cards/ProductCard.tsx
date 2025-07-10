@@ -1,5 +1,5 @@
 // 📄 Fayl: src/components/cards/ProductCard.tsx
-// 🛒 Maqsad: DRY, reusable, responsive ProductCard — Countdown dizayniga 1:1 moslashtirildi
+// 🛒 Maqsad: DRY, reusable, responsive ProductCard – barcha variantlar uchun universal komponent (default, deal, sidebar, list)
 
 import React from "react";
 import Image from "next/image";
@@ -14,9 +14,9 @@ interface ProductCardProps {
   oldPrice?: number;
   rating: number;
   description?: string;
-  isCentered?: boolean;
-  showCountdown?: React.ReactNode;
   slug?: string;
+  showCountdown?: React.ReactNode;
+  variant?: "default" | "deal" | "sidebar" | "list";
 }
 
 function PriceBlock({ price, oldPrice }: { price: number; oldPrice?: number }) {
@@ -42,30 +42,61 @@ export default function ProductCard({
   oldPrice,
   rating,
   description,
-  isCentered = false,
-  showCountdown,
   slug = "product-details",
+  showCountdown,
+  variant = "default",
 }: ProductCardProps) {
+  const isDeal = variant === "deal";
+  const isDefault = variant === "default";
+  const isSidebar = variant === "sidebar";
+  const isList = variant === "list";
+
   return (
-    <div className="w-[731px] h-[389px] flex items-start justify-start">
-      <div className="w-full h-full bg-white rounded-xl shadow flex gap-[18px] pl-[15px] pr-[15px] pt-[15px] pb-[13px] overflow-hidden">
-        {/* Chap taraf: Rasm */}
-        <div className="relative w-[360px] h-[360px] shrink-0">
+    <div
+      className={
+        isDeal
+          ? "w-[731px] h-[389px]"
+          : isDefault
+          ? "w-[280px] h-auto"
+          : isSidebar
+          ? "w-[200px] h-auto"
+          : isList
+          ? "w-full h-[140px]"
+          : ""
+      }
+    >
+      <div
+        className={`bg-white rounded-xl shadow overflow-hidden flex ${
+          isDeal || isList ? "flex-row" : "flex-col"
+        }`}
+      >
+        {/* 🖼 Rasm qismi */}
+        <div
+          className={`relative ${
+            isDeal
+              ? "w-[360px] h-[360px]"
+              : isList
+              ? "w-[140px] h-[140px]"
+              : isSidebar
+              ? "w-full h-[180px]"
+              : "w-full h-[250px]"
+          } flex-shrink-0 mx-auto`}
+        >
           <Link href={`/product/${slug}`}>
             <Image
               src={image1}
               alt={name}
               fill
-              sizes="360px"
-              className="rounded-md object-cover w-full h-full"
+              sizes="100%"
+              className="rounded-md object-cover"
               priority
             />
             <Image
               src={image2}
               alt={`${name} hover`}
               fill
-              sizes="360px"
-              className="absolute top-0 left-0 w-full h-full object-cover rounded-md opacity-0 hover:opacity-100 transition duration-300"
+              sizes="100%"
+              className="absolute top-0 left-0 object-cover rounded-md opacity-0 hover:opacity-100 transition duration-300"
               aria-hidden="true"
             />
           </Link>
@@ -76,30 +107,32 @@ export default function ProductCard({
           )}
         </div>
 
-        {/* O‘ng taraf: Ma’lumotlar */}
-        <div className="flex flex-col justify-between flex-1 pt-[10px] pb-[6px]">
-          <div className="flex flex-col space-y-[14px]">
-            <Link
-              href={`/product/${slug}`}
-              className={`block text-[15px] font-semibold text-blue-800 leading-tight hover:underline ${isCentered ? "text-center" : ""}`}
-            >
-              {name}
-            </Link>
+        {/* ℹ️ Ma’lumot qismi */}
+        <div
+          className={`flex flex-col justify-between gap-3 p-4 flex-1 ${
+            isDeal ? "pt-[10px] pb-[6px]" : ""
+          }`}
+        >
+          <Link
+            href={`/product/${slug}`}
+            className="block text-[15px] font-semibold text-blue-800 leading-tight hover:underline"
+          >
+            {name}
+          </Link>
 
-            <StarRating rating={rating} centered={isCentered} />
+          <StarRating rating={rating} centered={false} />
 
-            <PriceBlock price={price} oldPrice={oldPrice} />
+          <PriceBlock price={price} oldPrice={oldPrice} />
 
-            {description && !isCentered && (
-              <p className="text-sm text-gray-500 max-w-full whitespace-normal">
-                {description}
-              </p>
-            )}
-          </div>
+          {description && (isDeal || isList) && (
+            <p className="text-sm text-gray-500 max-w-full whitespace-normal">
+              {description}
+            </p>
+          )}
 
           {showCountdown && (
-            <div className="mt-[20px]">
-              <h4 className="text-[14px] font-medium mb-[12px] text-gray-700">
+            <div className="mt-2">
+              <h4 className="text-[14px] font-medium mb-[8px] text-gray-700">
                 Hurry Up! Offer ends in:
               </h4>
               {showCountdown}
