@@ -1,5 +1,5 @@
 // 📄 Fayl: src/components/sections/ElectronicsSlider.tsx
-// 📦 Maqsad: Electronic & Digital Products slider — useAutoplaySlider bilan modular, responsive va reusabilityga tayyor qilingan versiya
+// 📦 Maqsad: Electronic & Digital Products slider — faqat admin paneldan keladigan ma’lumotlar asosida badge/new chiqadigan tozalangan versiya
 
 "use client";
 
@@ -22,8 +22,6 @@ const electronicsData = [
     rating: 4,
     reviewsCount: 26,
     category: "Monitors",
-    badge: "Featured",
-    isNew: true,
     isWished: false,
     stockLeft: 5,
   },
@@ -38,8 +36,6 @@ const electronicsData = [
     rating: 5,
     reviewsCount: 104,
     category: "Ultrawide",
-    badge: "Top Rated",
-    isNew: false,
     isWished: true,
     stockLeft: 2,
   },
@@ -53,8 +49,6 @@ const electronicsData = [
     rating: 3,
     reviewsCount: 11,
     category: "Home Appliances",
-    badge: "Limited",
-    isNew: true,
     isWished: false,
     stockLeft: 1,
   },
@@ -82,8 +76,6 @@ export default function ElectronicsSlider() {
             oldPrice={item.oldPrice}
             slug={item.slug}
             category={item.category}
-            badge={item.badge}
-            isNew={item.isNew}
             isWished={item.isWished}
             stockLeft={item.stockLeft}
           />

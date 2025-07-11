@@ -1,6 +1,5 @@
 // 📄 Fayl: src/components/sections/DealsSlider.tsx
-// 🎯 Maqsad: "Deals Of The Day" maxsus katta productlar uchun slider — autoplay, pause-on-hover, countdown bilan
-// ✅ Tozalandi: inline style olib tashlandi, balandlik Tailwind bilan class sifatida berildi
+// 🎯 Maqsad: "Deals Of The Day" slider — admin paneldan keladigan props asosida badge va isNew ni ko‘rsatadigan holatga tozalangan versiya
 
 "use client";
 
@@ -26,8 +25,6 @@ const dealsData = [
     oldPrice: 125,
     stockLeft: 4,
     category: "Smartphones",
-    badge: "Top Seller",
-    isNew: true,
     isWished: false,
     description: "Typi non habent claritatem insitam, est usus legentis in iis qui facit...",
     date: "2025-12-31T23:59:59",
@@ -57,8 +54,6 @@ export default function DealsSlider() {
             oldPrice={item.oldPrice}
             description={item.description}
             category={item.category}
-            badge={item.badge}
-            isNew={item.isNew}
             isWished={item.isWished}
             stockLeft={item.stockLeft}
             slug={item.slug}
