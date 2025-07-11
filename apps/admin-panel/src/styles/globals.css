@@ -1,0 +1,19 @@
+/* 📄 Fayl: digiworlduz/apps/admin-panel/src/styles/globals.css */
+/* 🎯 Maqsad: Tailwind direktivalari va global stillar */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: 'Inter', sans-serif;
+  @apply bg-white text-black;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+a {
+  @apply transition-colors duration-200 hover:text-blue-600;
+}

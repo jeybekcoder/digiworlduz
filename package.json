@@ -1,0 +1,38 @@
+{
+  "name": "digiworlduz",
+  "private": true,
+  "packageManager": "npm@10.5.0",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "scripts": {
+    "dev:web": "turbo run dev --filter=web",
+    "dev:admin": "turbo run dev --filter=admin-panel",
+    "dev:all": "turbo run dev --parallel",
+    "build:web": "turbo run build --filter=web",
+    "build:admin": "turbo run build --filter=admin-panel",
+    "start:web": "turbo run start --filter=web",
+    "start:admin": "turbo run start --filter=admin-panel"
+  },
+  "devDependencies": {
+    "@types/node": "^24.0.13",
+    "@types/react": "^19.1.8",
+    "@types/react-dom": "^19.1.6",
+    "turbo": "latest",
+    "typescript": "^5.8.3"
+  },
+  "dependencies": {
+    "@radix-ui/react-dialog": "^1.1.14",
+    "autoprefixer": "^10.4.21",
+    "class-variance-authority": "^0.7.1",
+    "lucide-react": "^0.525.0",
+    "next": "^15.3.5",
+    "postcss": "^8.5.6",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "tailwind-merge": "^3.3.1",
+    "tailwind-variants": "^1.0.0",
+    "tailwindcss": "^4.1.11"
+  }
+}
