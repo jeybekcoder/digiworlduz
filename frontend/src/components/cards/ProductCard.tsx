@@ -1,5 +1,5 @@
 // 📄 Fayl: src/components/cards/ProductCard.tsx
-// 🛒 Maqsad: DRY, reusable, responsive ProductCard – barcha variantlar uchun universal komponent (default, deal, sidebar, list)
+// 🛒 Maqsad: DRY, reusable, responsive ProductCard – barcha variantlar uchun universal komponent (default, deal, sidebar, list, horizontal)
 
 import React from "react";
 import Image from "next/image";
@@ -16,7 +16,7 @@ interface ProductCardProps {
   description?: string;
   slug?: string;
   showCountdown?: React.ReactNode;
-  variant?: "default" | "deal" | "sidebar" | "list";
+  variant?: "default" | "deal" | "sidebar" | "list" | "horizontal";
 }
 
 function PriceBlock({ price, oldPrice }: { price: number; oldPrice?: number }) {
@@ -50,11 +50,14 @@ export default function ProductCard({
   const isDefault = variant === "default";
   const isSidebar = variant === "sidebar";
   const isList = variant === "list";
+  const isHorizontal = variant === "horizontal";
 
   return (
     <div
       className={
         isDeal
+          ? "w-full max-w-[850px] h-[360px]"
+          : isHorizontal
           ? "w-[731px] h-[389px]"
           : isDefault
           ? "w-[280px] h-auto"
@@ -67,20 +70,20 @@ export default function ProductCard({
     >
       <div
         className={`bg-white rounded-xl shadow overflow-hidden flex ${
-          isDeal || isList ? "flex-row" : "flex-col"
+          isDeal || isList || isHorizontal ? "flex-row" : "flex-col"
         }`}
       >
         {/* 🖼 Rasm qismi */}
         <div
           className={`relative ${
-            isDeal
+            isDeal || isHorizontal
               ? "w-[360px] h-[360px]"
               : isList
               ? "w-[140px] h-[140px]"
               : isSidebar
               ? "w-full h-[180px]"
               : "w-full h-[250px]"
-          } flex-shrink-0 mx-auto`}
+          } flex-shrink-0`}
         >
           <Link href={`/product/${slug}`}>
             <Image
@@ -110,7 +113,7 @@ export default function ProductCard({
         {/* ℹ️ Ma’lumot qismi */}
         <div
           className={`flex flex-col justify-between gap-3 p-4 flex-1 ${
-            isDeal ? "pt-[10px] pb-[6px]" : ""
+            isDeal || isHorizontal ? "pt-[8px] pb-[8px] pr-[20px]" : ""
           }`}
         >
           <Link
@@ -124,7 +127,7 @@ export default function ProductCard({
 
           <PriceBlock price={price} oldPrice={oldPrice} />
 
-          {description && (isDeal || isList) && (
+          {description && (isDeal || isList || isHorizontal) && (
             <p className="text-sm text-gray-500 max-w-full whitespace-normal">
               {description}
             </p>

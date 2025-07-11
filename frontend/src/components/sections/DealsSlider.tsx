@@ -1,6 +1,6 @@
 // 📄 Fayl: src/components/sections/DealsSlider.tsx
 // 🎯 Maqsad: "Deals Of The Day" maxsus katta productlar uchun slider — autoplay, pause-on-hover, countdown bilan
-// 💡 Taklif: Har bir katta mahsulot slayderi (Deals) mustaqil komponentda bo'lishi kerak. Bu UI arxitekturasini aniq qiladi va frontend modulligini oshiradi.
+// ✅ Tozalandi: inline style olib tashlandi, balandlik Tailwind bilan class sifatida berildi
 
 "use client";
 
@@ -36,30 +36,38 @@ export default function DealsSlider() {
 
   const { startAutoplay, stopAutoplay } = useAutoplaySlider(instanceRef);
 
-  const renderDeals = useMemo(() => (
-    dealsData.map((item) => (
-      <div key={item.id} className="keen-slider__slide min-w-[360px] shrink-0">
-        <ProductCard
-          image1={item.image1}
-          image2={item.image2}
-          name={item.name}
-          rating={item.rating}
-          price={item.price}
-          oldPrice={item.oldPrice}
-          description={item.description}
-          slug={item.slug}
-          showCountdown={
-            <Countdown
-              date={new Date(item.date)}
-              renderer={({ days, hours, minutes, seconds }) => (
-                <CountdownCircle days={days} hours={hours} minutes={minutes} seconds={seconds} />
-              )}
-            />
-          }
-        />
-      </div>
-    ))
-  ), []);
+  const renderDeals = useMemo(
+    () =>
+      dealsData.map((item) => (
+        <div key={item.id} className="keen-slider__slide min-w-[360px] shrink-0 h-[449.5px]">
+          <ProductCard
+            variant="deal"
+            image1={item.image1}
+            image2={item.image2}
+            name={item.name}
+            rating={item.rating}
+            price={item.price}
+            oldPrice={item.oldPrice}
+            description={item.description}
+            slug={item.slug}
+            showCountdown={
+              <Countdown
+                date={new Date(item.date)}
+                renderer={({ days, hours, minutes, seconds }) => (
+                  <CountdownCircle
+                    days={days}
+                    hours={hours}
+                    minutes={minutes}
+                    seconds={seconds}
+                  />
+                )}
+              />
+            }
+          />
+        </div>
+      )),
+    []
+  );
 
   return (
     <div>
