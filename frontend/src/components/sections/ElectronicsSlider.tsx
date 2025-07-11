@@ -18,7 +18,14 @@ const electronicsData = [
     image2: "/assets/img/Products/smartphone/product4.jpg",
     name: "LG 27UD58: £347.21, Ebuyer.com",
     price: 560,
+    oldPrice: 620,
     rating: 4,
+    reviewsCount: 26,
+    category: "Monitors",
+    badge: "Featured",
+    isNew: true,
+    isWished: false,
+    stockLeft: 5,
   },
   {
     id: 2,
@@ -27,7 +34,14 @@ const electronicsData = [
     image2: "/assets/img/Products/smartphone/product5.jpg",
     name: "Samsung C49J89: £875, Debenhams Plus",
     price: 450,
+    oldPrice: 499,
     rating: 5,
+    reviewsCount: 104,
+    category: "Ultrawide",
+    badge: "Top Rated",
+    isNew: false,
+    isWished: true,
+    stockLeft: 2,
   },
   {
     id: 3,
@@ -37,28 +51,46 @@ const electronicsData = [
     name: "High Quality Glass Ultra-Thin Kitchen Scale",
     price: 500,
     rating: 3,
+    reviewsCount: 11,
+    category: "Home Appliances",
+    badge: "Limited",
+    isNew: true,
+    isWished: false,
+    stockLeft: 1,
   },
 ];
 
 export default function ElectronicsSlider() {
-  const [sliderRef, instanceRef] = useKeenSlider({ loop: true, slides: { perView: "auto", spacing: 20 } });
+  const [sliderRef, instanceRef] = useKeenSlider({
+    loop: true,
+    slides: { perView: "auto", spacing: 20 },
+  });
   const { startAutoplay, stopAutoplay } = useAutoplaySlider(instanceRef);
 
-  const renderElectronics = useMemo(() => (
-    electronicsData.map((item) => (
-      <div key={item.id} className="keen-slider__slide">
-        <ProductCard
-          image1={item.image1}
-          image2={item.image2}
-          name={item.name}
-          price={item.price}
-          rating={item.rating}
-          slug={item.slug}
-          variant="default"
-        />
-      </div>
-    ))
-  ), []);
+  const renderElectronics = useMemo(
+    () =>
+      electronicsData.map((item) => (
+        <div key={item.id} className="keen-slider__slide">
+          <ProductCard
+            variant="default"
+            image1={item.image1}
+            image2={item.image2}
+            name={item.name}
+            rating={item.rating}
+            reviewsCount={item.reviewsCount}
+            price={item.price}
+            oldPrice={item.oldPrice}
+            slug={item.slug}
+            category={item.category}
+            badge={item.badge}
+            isNew={item.isNew}
+            isWished={item.isWished}
+            stockLeft={item.stockLeft}
+          />
+        </div>
+      )),
+    []
+  );
 
   return (
     <div>

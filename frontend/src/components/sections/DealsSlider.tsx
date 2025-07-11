@@ -21,8 +21,14 @@ const dealsData = [
     image2: "/assets/img/Products/smartphone/product2.jpg",
     name: "Original Mobile Android Dual SIM Smart Phone G3",
     rating: 5,
+    reviewsCount: 128,
     price: 120,
     oldPrice: 125,
+    stockLeft: 4,
+    category: "Smartphones",
+    badge: "Top Seller",
+    isNew: true,
+    isWished: false,
     description: "Typi non habent claritatem insitam, est usus legentis in iis qui facit...",
     date: "2025-12-31T23:59:59",
   },
@@ -46,9 +52,15 @@ export default function DealsSlider() {
             image2={item.image2}
             name={item.name}
             rating={item.rating}
+            reviewsCount={item.reviewsCount}
             price={item.price}
             oldPrice={item.oldPrice}
             description={item.description}
+            category={item.category}
+            badge={item.badge}
+            isNew={item.isNew}
+            isWished={item.isWished}
+            stockLeft={item.stockLeft}
             slug={item.slug}
             showCountdown={
               <Countdown
