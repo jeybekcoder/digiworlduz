@@ -1,0 +1,22 @@
+// 📄 Fayl: tsconfig.base.json
+// 🌐 DigiWorldUZ TurboRepo uchun global TypeScript config
+{
+  "compilerOptions": {
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "baseUrl": ".",
+    "paths": {
+      "@ui/*": ["packages/ui/src/*"],
+      "@auth/*": ["packages/auth/src/*"],
+      "@api/*": ["packages/api/src/*"],
+      "@types/*": ["packages/types/*"]
+    },
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "jsx": "preserve"
+  }
+}

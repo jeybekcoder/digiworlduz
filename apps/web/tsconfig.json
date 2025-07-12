@@ -1,0 +1,39 @@
+// 📄 Fayl: apps/web/tsconfig.json
+// 🎯 Maqsad: DigiWorldUZ Next.js + TypeScript ilovasi uchun to‘liq tsconfig
+// 🧱 TECHUS stack asosida — TurboRepo struktura va path aliaslarga moslashtirilgan
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "baseUrl": "./src",
+    "paths": {
+      "@/*": ["*"],
+      "@components/*": ["components/*"],
+      "@app/*": ["app/*"],
+      "@styles/*": ["styles/*"]
+    },
+    "jsx": "preserve",
+    "moduleResolution": "bundler",
+    "allowJs": true,
+    "strict": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "lib": ["dom", "dom.iterable", "esnext"],
+    "incremental": true,
+    "isolatedModules": true,
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ]
+  },
+  "include": [
+    "next-env.d.ts",
+    "src/app/**/*",
+    "src/components/**/*",
+    "src/styles/**/*",
+    ".next/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
+}
