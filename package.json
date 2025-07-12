@@ -9,7 +9,8 @@
   "scripts": {
     "dev:web": "turbo run dev --filter=web",
     "dev:admin": "turbo run dev --filter=admin-panel",
-    "dev:all": "turbo run dev --parallel",
+    "dev:backend": "cd backend && cross-env PYTHONPATH=. uvicorn admin_api.main:app --reload --port 8001",
+    "dev:all": "concurrently -n admin,api -c cyan,green \"npm run dev:admin\" \"npm run dev:backend\"",
     "build:web": "turbo run build --filter=web",
     "build:admin": "turbo run build --filter=admin-panel",
     "start:web": "turbo run start --filter=web",
@@ -19,6 +20,8 @@
     "@types/node": "^24.0.13",
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
+    "concurrently": "^8.2.2",
+    "cross-env": "^7.0.3",
     "turbo": "latest",
     "typescript": "^5.8.3"
   },

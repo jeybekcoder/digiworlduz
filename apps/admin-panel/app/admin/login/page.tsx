@@ -1,5 +1,5 @@
-// 📄 Fayl: apps/admin-panel/app/(auth)/login/page.tsx
-// 🎯 Maqsad: Admin panel login sahifasi – maksimal xavfsizlik va UX: login urinish chegarasi, caps lock ogohlantiruv, spinner, redirect, toast ogohlantirishlar (uzbekcha alertlar bilan)
+// 📄 Fayl: apps/admin-panel/app/admin/login/page.tsx
+// 🎯 Maqsad: Admin panel login sahifasi – JWT backendga ulanib, token bilan tizimga kirish, tokenni saqlash va redirect qilish
 
 "use client";
 
@@ -57,11 +57,27 @@ export default function LoginPage() {
 
     try {
       setLoading(true);
-      await new Promise((resolve) => setTimeout(resolve, 1500));
+
+      const response = await fetch("http://localhost:8001/admin/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          username: email,
+          password: password,
+        }),
+      });
+
+      if (!response.ok) {
+        const data = await response.json();
+        throw new Error(data.detail || "Tizimga kirishda xatolik yuz berdi.");
+      }
+
+      const data = await response.json();
+      localStorage.setItem("admin_token", data.access_token);
       setSuccess("✅ Muvaffaqiyatli tizimga kirdingiz!");
       setTimeout(() => router.push("/admin/dashboard"), 1000);
-    } catch (err) {
-      setError("⚠️ Tizimga kirishda texnik xatolik yuz berdi. Iltimos, qaytadan urinib ko‘ring.");
+    } catch (err: any) {
+      setError("⚠️ " + err.message);
       setAttempts((prev) => prev + 1);
     } finally {
       setLoading(false);
@@ -77,7 +93,6 @@ export default function LoginPage() {
         </p>
 
         <form className="space-y-4" onSubmit={!loading ? handleSubmit : undefined} aria-label="Admin panelga kirish formasi">
-          {/* Honeypot field */}
           <input
             type="text"
             name="nickname"
@@ -89,7 +104,6 @@ export default function LoginPage() {
             aria-hidden="true"
           />
 
-          {/* Email */}
           <div>
             <label htmlFor="email" className="text-sm block mb-1">Elektron pochta</label>
             <input
@@ -107,7 +121,6 @@ export default function LoginPage() {
             />
           </div>
 
-          {/* Password + Toggle */}
           <div>
             <label htmlFor="password" className="text-sm block mb-1">Parol</label>
             <div className="relative">
@@ -137,7 +150,6 @@ export default function LoginPage() {
             {capsLockOn && <p className="text-yellow-600 text-xs mt-1">Eslatma: Caps Lock yoqilgan!</p>}
           </div>
 
-          {/* Remember me */}
           <div className="flex items-center gap-2">
             <input
               type="checkbox"
@@ -151,11 +163,9 @@ export default function LoginPage() {
             </label>
           </div>
 
-          {/* Feedback */}
           {error && <div role="alert" className="text-red-600 text-sm">{error}</div>}
           {success && <div role="status" className="text-green-600 text-sm">{success}</div>}
 
-          {/* Submit */}
           <button
             type="submit"
             disabled={loading}
