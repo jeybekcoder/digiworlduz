@@ -1,5 +1,5 @@
 // 📄 Fayl: apps/admin-panel/app/admin/login/page.tsx
-// 🎯 Maqsad: Admin panel login sahifasi – JWT backendga ulanib, token bilan tizimga kirish, tokenni saqlash va redirect qilish
+// 🎯 Maqsad: Admin panel login sahifasi – JWT backendga ulanib, token bilan tizimga kirish (2FA bilan yoki holda), tokenni saqlash va redirect qilish
 
 "use client";
 
@@ -11,6 +11,9 @@ export default function LoginPage() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [twoFactorCode, setTwoFactorCode] = useState("");
+  const [userId, setUserId] = useState("");
+  const [show2FA, setShow2FA] = useState(false);
   const [remember, setRemember] = useState(true);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
@@ -19,6 +22,7 @@ export default function LoginPage() {
   const [honeypot, setHoneypot] = useState("");
   const [capsLockOn, setCapsLockOn] = useState(false);
   const [attempts, setAttempts] = useState(0);
+  const [twoFactorNotEnabled, setTwoFactorNotEnabled] = useState(false);
 
   const MAX_ATTEMPTS = 3;
 
@@ -37,48 +41,66 @@ export default function LoginPage() {
       return;
     }
 
-    const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
-    if (!email.trim()) {
-      setError("📧 Iltimos, elektron pochta manzilini kiriting.");
-      return;
+    try {
+      setLoading(true);
+
+      const res = await fetch("http://localhost:8001/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok && res.status === 403 && data.detail?.includes("2FA yoqilmagan")) {
+        // 2FA yoqilmagan holat — token qaytariladi (doimiy emas!)
+        setTwoFactorNotEnabled(true);
+
+        localStorage.setItem("admin_token", data.access_token);
+        setSuccess("🟡 2FA yoqilmagan. Tizimga kirildi, lekin xavfsizlik past!");
+        setTimeout(() => router.push("/admin/dashboard"), 2000);
+        return;
+      }
+
+      if (!res.ok) {
+        throw new Error(data.detail || "Login xatoligi");
+      }
+
+      setUserId(data.user_id);
+      setShow2FA(true);
+    } catch (err: any) {
+      setError("⚠️ " + err.message);
+      setAttempts((prev) => prev + 1);
+    } finally {
+      setLoading(false);
     }
-    if (!emailRegex.test(email)) {
-      setError("📭 Elektron pochta formati noto‘g‘ri. Iltimos, to‘g‘ri manzil kiriting.");
-      return;
-    }
-    if (!password.trim()) {
-      setError("🔒 Iltimos, parolingizni kiriting.");
-      return;
-    }
-    if (password.length < 6) {
-      setError("🔑 Parol kamida 6 belgidan iborat bo‘lishi kerak.");
-      return;
-    }
+  };
+
+  const handleVerify2FA = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
 
     try {
       setLoading(true);
 
-      const response = await fetch("http://localhost:8001/admin/login", {
+      const res = await fetch("http://localhost:8001/auth/verify-2fa", {
         method: "POST",
-        headers: { "Content-Type": "application/x-www-form-urlencoded" },
-        body: new URLSearchParams({
-          username: email,
-          password: password,
-        }),
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ user_id: userId, code: twoFactorCode }),
       });
 
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.detail || "Tizimga kirishda xatolik yuz berdi.");
+      if (!res.ok) {
+        const data = await res.json();
+        throw new Error(data.detail || "2FA tekshiruvida xatolik");
       }
 
-      const data = await response.json();
+      const data = await res.json();
       localStorage.setItem("admin_token", data.access_token);
       setSuccess("✅ Muvaffaqiyatli tizimga kirdingiz!");
       setTimeout(() => router.push("/admin/dashboard"), 1000);
     } catch (err: any) {
-      setError("⚠️ " + err.message);
-      setAttempts((prev) => prev + 1);
+      setError("❌ " + err.message);
     } finally {
       setLoading(false);
     }
@@ -89,10 +111,14 @@ export default function LoginPage() {
       <div className="w-full max-w-md bg-white rounded-xl shadow-md p-8">
         <h2 className="text-xl font-semibold text-[#1e2d5c] mb-1">Tizimga kirish</h2>
         <p className="text-sm text-gray-500 mb-6">
-          Admin panelga kirish uchun elektron pochta va parolingizni kiriting.
+          Admin panelga kirish uchun maʼlumotlaringizni kiriting.
         </p>
 
-        <form className="space-y-4" onSubmit={!loading ? handleSubmit : undefined} aria-label="Admin panelga kirish formasi">
+        <form
+          className="space-y-4"
+          onSubmit={!loading ? (show2FA ? handleVerify2FA : handleSubmit) : undefined}
+          aria-label="Admin panelga kirish formasi"
+        >
           <input
             type="text"
             name="nickname"
@@ -104,64 +130,87 @@ export default function LoginPage() {
             aria-hidden="true"
           />
 
-          <div>
-            <label htmlFor="email" className="text-sm block mb-1">Elektron pochta</label>
-            <input
-              id="email"
-              name="email"
-              type="text"
-              placeholder="Email manzilingizni kiriting"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              autoComplete="off"
-              inputMode="text"
-              spellCheck={false}
-              aria-required="true"
-              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400"
-            />
-          </div>
+          {!show2FA && (
+            <>
+              <div>
+                <label htmlFor="email" className="text-sm block mb-1">
+                  Elektron pochta
+                </label>
+                <input
+                  id="email"
+                  name="email"
+                  type="text"
+                  placeholder="Email manzilingiz"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  autoComplete="off"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400"
+                />
+              </div>
 
-          <div>
-            <label htmlFor="password" className="text-sm block mb-1">Parol</label>
-            <div className="relative">
+              <div>
+                <label htmlFor="password" className="text-sm block mb-1">Parol</label>
+                <div className="relative">
+                  <input
+                    id="password"
+                    name="password"
+                    type={showPassword ? "text" : "password"}
+                    placeholder="Parolingiz"
+                    value={password}
+                    onChange={(e) => setPassword(e.target.value)}
+                    onKeyUp={(e) => setCapsLockOn(e.getModifierState("CapsLock"))}
+                    autoComplete="off"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400 pr-12"
+                  />
+                  <button
+                    type="button"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-blue-500 hover:underline"
+                  >
+                    {showPassword ? "Yopish" : "Ko‘rsatish"}
+                  </button>
+                </div>
+                {capsLockOn && (
+                  <p className="text-yellow-600 text-xs mt-1">Eslatma: Caps Lock yoqilgan!</p>
+                )}
+              </div>
+
+              <div className="flex items-center gap-2">
+                <input
+                  type="checkbox"
+                  id="remember"
+                  checked={remember}
+                  onChange={() => setRemember(!remember)}
+                  className="accent-blue-600 scale-110 cursor-pointer"
+                />
+                <label htmlFor="remember" className="text-sm text-gray-600 cursor-pointer">
+                  Meni eslab qol
+                </label>
+              </div>
+            </>
+          )}
+
+          {show2FA && (
+            <div>
+              <label htmlFor="code" className="text-sm block mb-1">2FA Kodi</label>
               <input
-                id="password"
-                name="password"
-                type={showPassword ? "text" : "password"}
-                placeholder="Parolingizni kiriting"
-                value={password}
-                onChange={(e) => setPassword(e.target.value)}
-                onKeyUp={(e) => setCapsLockOn(e.getModifierState("CapsLock"))}
-                autoComplete="off"
-                inputMode="text"
-                spellCheck={false}
-                aria-required="true"
-                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400 pr-12"
+                id="code"
+                name="code"
+                type="text"
+                placeholder="Mobil ilovadagi 6 xonali kod"
+                value={twoFactorCode}
+                onChange={(e) => setTwoFactorCode(e.target.value)}
+                autoComplete="one-time-code"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400"
               />
-              <button
-                type="button"
-                aria-label="Parolni ko‘rsatish yoki berkitish"
-                onClick={() => setShowPassword(!showPassword)}
-                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-blue-500 hover:underline"
-              >
-                {showPassword ? "Yopish" : "Ko‘rsatish"}
-              </button>
             </div>
-            {capsLockOn && <p className="text-yellow-600 text-xs mt-1">Eslatma: Caps Lock yoqilgan!</p>}
-          </div>
+          )}
 
-          <div className="flex items-center gap-2">
-            <input
-              type="checkbox"
-              id="remember"
-              checked={remember}
-              onChange={() => setRemember(!remember)}
-              className="accent-blue-600 scale-110 cursor-pointer"
-            />
-            <label htmlFor="remember" className="text-sm text-gray-600 cursor-pointer">
-              Meni eslab qol
-            </label>
-          </div>
+          {twoFactorNotEnabled && (
+            <div className="text-yellow-600 text-sm border border-yellow-200 p-2 rounded-md bg-yellow-50">
+              ⚠️ Sizda ikki bosqichli autentifikatsiya yoqilmagan. Iltimos, xavfsizlik uchun <strong>Sozlamalar</strong> bo‘limida yoqing.
+            </div>
+          )}
 
           {error && <div role="alert" className="text-red-600 text-sm">{error}</div>}
           {success && <div role="status" className="text-green-600 text-sm">{success}</div>}
@@ -175,7 +224,7 @@ export default function LoginPage() {
             {loading && (
               <span className="w-4 h-4 border-2 border-t-transparent border-[#e86c4c] rounded-full animate-spin"></span>
             )}
-            {loading ? "Yuklanmoqda..." : "Kirish"}
+            {loading ? "Yuklanmoqda..." : show2FA ? "Tasdiqlash" : "Kirish"}
           </button>
         </form>
       </div>
