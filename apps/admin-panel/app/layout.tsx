@@ -1,6 +1,4 @@
 // 📄 Fayl: digiworlduz/apps/admin-panel/app/layout.tsx
-// 🎯 Maqsad: Tailwind + Global styles ishlashi uchun asosiy layout komponenti
-
 import "../src/styles/globals.css";
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
@@ -15,9 +13,7 @@ export const metadata: Metadata = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en" className={inter.variable}>
-      <body className="min-h-screen bg-background antialiased">
-        {children}
-      </body>
+      <body className="min-h-screen bg-white antialiased">{children}</body>
     </html>
   );
 }

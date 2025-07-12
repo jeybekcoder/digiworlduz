@@ -1,5 +1,5 @@
-// 📄 Fayl: digiworlduz/apps/admin-panel/postcss.config.js
-// 🎯 Maqsad: Tailwind CSS va Autoprefixer ni PostCSS orqali birlashtirish
+// 📄 Fayl: digiworlduz/apps/admin-panel/postcss.config.cjs
+// 🎯 Maqsad: Tailwind CSS v4 bilan 100% mos CommonJS konfiguratsiyasi
 
 module.exports = {
   plugins: {
