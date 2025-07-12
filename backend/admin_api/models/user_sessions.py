@@ -27,6 +27,7 @@ class UserSession(SQLModel, table=True):
 
     refresh_token: Optional[str] = Field(default=None, description="Hozirgi sessiyaga tegishli refresh token")
     is_active: bool = Field(default=True, description="Session hozir faolmi yoki log out qilinganmi")
+    revoked_at: Optional[datetime] = Field(default=None, description="Agar token rotation yoki logout bo‘lsa, qachon bekor qilingan")
 
     created_at: datetime = Field(default_factory=datetime.utcnow)
     updated_at: datetime = Field(default_factory=datetime.utcnow)
@@ -36,4 +37,5 @@ class UserSession(SQLModel, table=True):
     def deactivate(self):
         """Log out yoki session tugashi uchun sessionni passivlashtirish"""
         self.is_active = False
+        self.revoked_at = datetime.utcnow()
         self.updated_at = datetime.utcnow()

@@ -7,9 +7,11 @@ from sqlalchemy.ext.asyncio import create_async_engine
 
 from ..models import user  # relative import orqali
 from ..models import user_sessions  # relative import orqali
+from ..config import get_settings
 
-DATABASE_URL = "postgresql+asyncpg://postgres:password@localhost:5432/digiworlduz"
-engine = create_async_engine(DATABASE_URL, echo=True)
+settings = get_settings()
+
+engine = create_async_engine(settings.DATABASE_URL, echo=True)
 
 # ⚙️ Init function – jadvallarni yaratish uchun
 async def init_db():

@@ -14,4 +14,8 @@ class User(SQLModel, table=True):
     is_admin: bool = True
     role: str = "owner"  # owner, manager, editor va h.k
 
+    # 🔐 2FA bilan bog‘liq maydonlar
+    two_factor_enabled: bool = False  # Foydalanuvchi 2FA ni yoqqanmi
+    two_factor_secret: Optional[str] = None  # TOTP uchun Base32 secret
+
     sessions: List[UserSession] = Relationship(back_populates="user")

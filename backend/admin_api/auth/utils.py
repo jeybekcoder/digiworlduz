@@ -7,13 +7,9 @@ from datetime import datetime, timedelta
 from typing import Literal
 import uuid
 
-# 🔐 JWT sozlamalari
-JWT_SECRET_KEY = "your-secret-key"  # .env fayldan olish tavsiya etiladi
-JWT_ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 15
-REFRESH_TOKEN_EXPIRE_DAYS = 30
-ISSUER = "digiworlduz"
-AUDIENCE = "admin"
+from ..config import get_settings
+
+settings = get_settings()
 
 # 🧾 Access yoki Refresh token yaratish funksiyasi
 def create_jwt_token(
@@ -22,7 +18,7 @@ def create_jwt_token(
 ) -> str:
     now = datetime.utcnow()
     expire = now + timedelta(
-        minutes=ACCESS_TOKEN_EXPIRE_MINUTES if token_type == "access" else 60 * 24 * REFRESH_TOKEN_EXPIRE_DAYS
+        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES if token_type == "access" else 60 * 24 * settings.REFRESH_TOKEN_EXPIRE_DAYS
     )
 
     payload = {
@@ -32,9 +28,9 @@ def create_jwt_token(
         "iat": now,
         "nbf": now,
         "exp": expire,
-        "iss": ISSUER,
-        "aud": AUDIENCE
+        "iss": "digiworlduz",
+        "aud": "admin"
     }
 
-    encoded_jwt = jwt.encode(payload, JWT_SECRET_KEY, algorithm=JWT_ALGORITHM)
+    encoded_jwt = jwt.encode(payload, settings.JWT_SECRET_KEY, algorithm=settings.JWT_ALGORITHM)
     return encoded_jwt
