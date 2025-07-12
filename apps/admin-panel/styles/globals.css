@@ -2,26 +2,28 @@
    🎯 Maqsad: Tailwind CSS asosiy stil fayli – bazaviy shrift, rang va reset + Shadcn UI uchun umumiy stil
 */
 
-@tailwind base; /* ✅ Tailwind asosiy stil direktivalari mavjud, ammo `Shadcn UI` komponentlarining o‘ziga xos style'lari ishlashi uchun kerakli `@layer base {}` yoki `theme` definitsiyalari kerak bo‘lishi mumkin. */
+@tailwind base;
 @tailwind components;
 @tailwind utilities;
 
 /* Global tanasi uchun shrift va rang */
 body {
   font-family: "Rubik", sans-serif;
-  background-color: #f9fafb; /* bg-gray-50 ni qo‘lda beramiz */
-  color: #111827; /* text-gray-900 ni qo‘lda beramiz */
+  background-color: #f9fafb;
+  color: #111827;
 }
 
 /* Shadcn UI komponentlar uchun bazaviy stil */
 @layer base {
-  * {
-    @apply border-border outline-none ring-offset-background;
+  *,
+  ::before,
+  ::after {
+    @apply outline-none ring-offset-background;
   }
   input,
   textarea,
   select,
   button {
-    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2;
+    @apply focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2;
   }
 }

@@ -1,6 +1,4 @@
 // 📄 Fayl: /digiworlduz/apps/admin-panel/tailwind.config.ts
-// 🎯 Maqsad: Tailwind CSS sozlamalari – ranglar, shriftlar va content qamrovi
-// ⚙️ Tailwind 4.x + Shadcn + Rubik shrift uchun to‘liq konfiguratsiya
 
 import type { Config } from "tailwindcss";
 import defaultTheme from "tailwindcss/defaultTheme";
@@ -18,6 +16,7 @@ const config: Config = {
       colors: {
         primary: "#0075FF",
         secondary: "#FFB800",
+        background: "#f9fafb", // ✅ ring-offset-background uchun kerak
       },
     },
   },

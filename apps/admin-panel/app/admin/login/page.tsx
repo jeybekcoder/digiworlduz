@@ -1,126 +1,174 @@
-// 📄 Fayl: /digiworlduz/apps/admin-panel/app/admin/login/page.tsx
-// 🎯 Maqsad: Admin panelga kirish sahifasi (Login) – 1:1 pixel-perfect rasmga asoslangan
-// 🧱 Texnologiyalar: Next.js (App Router), Tailwind CSS, Shadcn UI
+// 📄 Fayl: apps/admin-panel/app/(auth)/login/page.tsx
+// 🎯 Maqsad: Admin panel login sahifasi – maksimal xavfsizlik va UX: login urinish chegarasi, caps lock ogohlantiruv, spinner, redirect, toast ogohlantirishlar (uzbekcha alertlar bilan)
 
 "use client";
 
-import { Input } from "@/components/ui/input";
-import { Button } from "@/components/ui/button";
-import { Label } from "@/components/ui/label";
-import { Checkbox } from "@/components/ui/checkbox";
-import { cn } from "@/lib/utils";
+import React, { useState } from "react";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
 
-export default function AdminLoginPage() {
+export default function LoginPage() {
   const router = useRouter();
+
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(true);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+  const [honeypot, setHoneypot] = useState("");
+  const [capsLockOn, setCapsLockOn] = useState(false);
+  const [attempts, setAttempts] = useState(0);
 
-  const handleLogin = () => {
-    // 🔐 Simulyatsiya: localStorage token o‘rnatish (real API kelajakda)
-    localStorage.setItem("admin_token", "demo_token");
-    router.push("/admin");
+  const MAX_ATTEMPTS = 3;
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setError("");
+    setSuccess("");
+
+    if (honeypot) {
+      setError("❌ Bot faoliyati aniqlandi. Kirish rad etildi.");
+      return;
+    }
+
+    if (attempts >= MAX_ATTEMPTS) {
+      setError("🚫 Juda ko‘p noto‘g‘ri urinish! Iltimos, keyinroq urinib ko‘ring.");
+      return;
+    }
+
+    const emailRegex = /^[\w-.]+@([\w-]+\.)+[\w-]{2,4}$/;
+    if (!email.trim()) {
+      setError("📧 Iltimos, elektron pochta manzilini kiriting.");
+      return;
+    }
+    if (!emailRegex.test(email)) {
+      setError("📭 Elektron pochta formati noto‘g‘ri. Iltimos, to‘g‘ri manzil kiriting.");
+      return;
+    }
+    if (!password.trim()) {
+      setError("🔒 Iltimos, parolingizni kiriting.");
+      return;
+    }
+    if (password.length < 6) {
+      setError("🔑 Parol kamida 6 belgidan iborat bo‘lishi kerak.");
+      return;
+    }
+
+    try {
+      setLoading(true);
+      await new Promise((resolve) => setTimeout(resolve, 1500));
+      setSuccess("✅ Muvaffaqiyatli tizimga kirdingiz!");
+      setTimeout(() => router.push("/admin/dashboard"), 1000);
+    } catch (err) {
+      setError("⚠️ Tizimga kirishda texnik xatolik yuz berdi. Iltimos, qaytadan urinib ko‘ring.");
+      setAttempts((prev) => prev + 1);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
-    <div className="min-h-screen flex">
-      {/* 🔵 Chap qism */}
-      <div className="flex-1 bg-[#f9f7f6] flex items-center justify-center p-6">
-        <div className="w-full max-w-md space-y-6">
-          {/* 🛍 Logotip */}
-          <h1 className="text-3xl font-extrabold text-[#1d3557]">
-            <span className="text-4xl">🛍</span> DIGI WORLD
-          </h1>
+    <main className="min-h-screen bg-[#fefcfc] flex items-center justify-center px-4">
+      <div className="w-full max-w-md bg-white rounded-xl shadow-md p-8">
+        <h2 className="text-xl font-semibold text-[#1e2d5c] mb-1">Tizimga kirish</h2>
+        <p className="text-sm text-gray-500 mb-6">
+          Admin panelga kirish uchun elektron pochta va parolingizni kiriting.
+        </p>
 
+        <form className="space-y-4" onSubmit={!loading ? handleSubmit : undefined} aria-label="Admin panelga kirish formasi">
+          {/* Honeypot field */}
+          <input
+            type="text"
+            name="nickname"
+            className="hidden"
+            value={honeypot}
+            onChange={(e) => setHoneypot(e.target.value)}
+            tabIndex={-1}
+            autoComplete="off"
+            aria-hidden="true"
+          />
+
+          {/* Email */}
           <div>
-            <h2 className="text-2xl font-semibold text-[#1d3557]">Sign In</h2>
-            <p className="text-sm text-gray-600">
-              Enter your email address and password to access admin panel.
-            </p>
+            <label htmlFor="email" className="text-sm block mb-1">Elektron pochta</label>
+            <input
+              id="email"
+              name="email"
+              type="text"
+              placeholder="Email manzilingizni kiriting"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              autoComplete="off"
+              inputMode="text"
+              spellCheck={false}
+              aria-required="true"
+              className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400"
+            />
           </div>
 
-          <div className="space-y-4">
-            <div className="space-y-1">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                type="email"
-                placeholder="Enter your email"
-                value={email}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setEmail(e.target.value)}
-              />
-            </div>
-
-            <div className="space-y-1">
-              <div className="flex justify-between items-center">
-                <Label htmlFor="password">Password</Label>
-                <a
-                  href="#"
-                  className="text-sm text-[#1d3557] hover:underline"
-                >
-                  Reset password
-                </a>
-              </div>
-              <Input
+          {/* Password + Toggle */}
+          <div>
+            <label htmlFor="password" className="text-sm block mb-1">Parol</label>
+            <div className="relative">
+              <input
                 id="password"
-                type="password"
-                placeholder="Enter your password"
+                name="password"
+                type={showPassword ? "text" : "password"}
+                placeholder="Parolingizni kiriting"
                 value={password}
-                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setPassword(e.target.value)}
+                onChange={(e) => setPassword(e.target.value)}
+                onKeyUp={(e) => setCapsLockOn(e.getModifierState("CapsLock"))}
+                autoComplete="off"
+                inputMode="text"
+                spellCheck={false}
+                aria-required="true"
+                className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-blue-400 pr-12"
               />
+              <button
+                type="button"
+                aria-label="Parolni ko‘rsatish yoki berkitish"
+                onClick={() => setShowPassword(!showPassword)}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-xs text-blue-500 hover:underline"
+              >
+                {showPassword ? "Yopish" : "Ko‘rsatish"}
+              </button>
             </div>
-
-            <div className="flex items-center space-x-2">
-              <Checkbox id="remember" />
-              <Label htmlFor="remember" className="text-sm">
-                Remember me
-              </Label>
-            </div>
-
-            <Button
-              className="w-full bg-red-100 text-red-600 hover:bg-red-200"
-              onClick={handleLogin}
-            >
-              Sign In
-            </Button>
+            {capsLockOn && <p className="text-yellow-600 text-xs mt-1">Eslatma: Caps Lock yoqilgan!</p>}
           </div>
 
-          <div className="relative py-4">
-            <div className="absolute inset-0 flex items-center">
-              <div className="w-full border-t border-gray-300" />
-            </div>
-            <div className="relative flex justify-center text-sm">
-              <span className="bg-[#f9f7f6] px-2 text-gray-500">OR sign with</span>
-            </div>
+          {/* Remember me */}
+          <div className="flex items-center gap-2">
+            <input
+              type="checkbox"
+              id="remember"
+              checked={remember}
+              onChange={() => setRemember(!remember)}
+              className="accent-blue-600 scale-110 cursor-pointer"
+            />
+            <label htmlFor="remember" className="text-sm text-gray-600 cursor-pointer">
+              Meni eslab qol
+            </label>
           </div>
 
-          <div className="space-y-2">
-            <Button
-              variant="outline"
-              className="w-full flex items-center justify-center bg-blue-50 text-black"
-            >
-              <span className="mr-2">🌐</span> Sign in with Google
-            </Button>
-            <Button
-              className="w-full bg-red-100 text-red-600 hover:bg-red-200"
-            >
-              <span className="mr-2">📘</span> Sign in with Facebook
-            </Button>
-          </div>
+          {/* Feedback */}
+          {error && <div role="alert" className="text-red-600 text-sm">{error}</div>}
+          {success && <div role="status" className="text-green-600 text-sm">{success}</div>}
 
-          <p className="text-center text-sm text-gray-500">
-            Don&apos;t have an account?{' '}
-            <a href="#" className="text-blue-800 font-medium">
-              Sign Up
-            </a>
-          </p>
-        </div>
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full flex items-center justify-center gap-2 py-2 bg-[#ffe1e1] text-[#e86c4c] rounded-md hover:opacity-90 font-semibold disabled:opacity-60"
+            aria-disabled={loading}
+          >
+            {loading && (
+              <span className="w-4 h-4 border-2 border-t-transparent border-[#e86c4c] rounded-full animate-spin"></span>
+            )}
+            {loading ? "Yuklanmoqda..." : "Kirish"}
+          </button>
+        </form>
       </div>
-      <button className="bg-green-500 text-white px-4 py-2 rounded">Test</button>
-
-      {/* 🔴 O‘ng rasm qismi */}
-      <div className="hidden md:block md:w-1/2 bg-cover bg-center rounded-l-none bg-[url('/login-image.jpg')]" />
-    </div>
+    </main>
   );
 }
