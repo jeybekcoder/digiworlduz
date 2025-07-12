@@ -1,9 +1,9 @@
-// 📄 Fayl: digiworlduz/apps/admin-panel/postcss.config.js
-// 🎯 Maqsad: Tailwind v4 uchun to‘g‘ri PostCSS konfiguratsiyasi (xatoliklarni to‘liq bartaraf etadi)
+// 📄 Fayl: digiworlduz/apps/admin-panel/postcss.config.cjs
+// 🎯 Maqsad: Tailwind CSS v4 bilan 100% mos CommonJS konfiguratsiyasi
 
 module.exports = {
   plugins: {
-    tailwindcss: {},       // ✅ Asosiy Tailwind plugin
-    autoprefixer: {},      // ✅ Brauzerlararo moslik uchun
+    tailwindcss: {},
+    autoprefixer: {},
   },
 };
