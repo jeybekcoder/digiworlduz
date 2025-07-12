@@ -1,4 +1,4 @@
-// File: E:\JEYBEK\JEYBEK CODER\DIGI WORLD\digiworlduz\apps\admin-panel\app\layout.tsx
+// File: C:\JEYBEK CODER\DIGI WORLD\digiworlduz\apps\admin-panel\app\layout.tsx
 import * as entry from '../../../app/layout.js'
 import type { ResolvingMetadata, ResolvingViewport } from 'next/dist/lib/metadata/types/metadata-interface.js'
 
